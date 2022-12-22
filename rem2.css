@@ -1,0 +1,241 @@
+/* body {
+    background-color: azure;
+    margin: 0;
+    border: none;
+    padding: 0;
+    user-select: none;
+}
+ */
+
+#heading-todo {
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.input-remainder {
+    border-radius: 10px 0px 0px 10px;
+    margin-left: 5%;
+    width: 70%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    height: 20px;
+    padding-left: 10px;
+}
+
+.addbutton {
+    font-size: 12px;
+    border-radius: 0px 10px 10px 0px;
+    height: 20px;
+    margin-right: 5%;
+    width: 20%;
+    padding: 0;
+    border: none;
+    margin: 0;
+    background-color: #bdbab5;
+}
+
+.addbutton:hover {
+    cursor: pointer;
+    background-color: #dbd8d3;
+}
+
+.addbutton:focus {
+    outline: none;
+}
+
+.input-remainder:focus {
+    outline: none;
+}
+
+.type-andd-add-remainder {
+    height: 40px;
+}
+
+.collection {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-flow: column;
+    user-select: auto;
+}
+
+.list-content {
+    font-size: 14px;
+    width: 73%;
+    height: 17px;
+    padding: 6px 0px 6px 1%;
+    background-color: #b8b8b8;
+    margin: 5px 13%;
+    transition-duration: 300ms;
+    transition-delay: 100ms;
+    border-radius: 5px;
+
+}
+
+.list-content:hover {
+    /* transform: rotateX(360deg); */
+    background-color: RGB(205, 149, 117);
+}
+
+.fa-remove {
+    float: right;
+    margin-right: 10px;
+    visibility: hidden;
+}
+
+
+.list-content:hover .fa-remove {
+    visibility: visible;
+}
+
+.fa-remove:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+.tasks-all {
+    margin-left: 10px;
+}
+
+#taskForm {
+    padding-bottom: 10px;
+}
+
+#clear-tasks {
+    font-weight: 600;
+    width: 150px;
+    color: white;
+    background-color: #4988c7;
+    margin: 10px;
+    height: 25px;
+    outline: none;
+    border: none;
+    transition-duration: 100ms;
+    border-radius: 10px 10px 10px 10px;
+
+}
+
+#clear-tasks:hover {
+    cursor: pointer;
+    text-shadow: 1px 1px 3px black;
+
+}
+
+/* #clear-tasks:focus {
+    outline: none;
+} */
+
+button:focus {
+    outline: none;
+}
+
+.errorBlk {
+    background-color: #cc3300;
+    text-align: center;
+    color: #cccccc;
+
+}
+
+.checkBox {
+    background-color: crimson;
+    color: rebeccapurple;
+    float: left;
+}
+
+
+.checkBoxes {
+    float: left;
+    margin-right: 13px;
+
+}
+
+.splitButtons {
+    display: none;
+    font-weight: 600;
+    width: 74px;
+    border-right: 1px solid black;
+    color: white;
+    background-color: #4988c7;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    height: 25px;
+    outline: none;
+    border: none;
+    transition-duration: 300ms;
+    transition-delay: 500ms;
+}
+
+.splitButtons:hover {
+    cursor: pointer;
+    transform: rotate(20deg);
+
+}
+
+#butt1 {
+    margin-left: 10px;
+    border-right: 1px dashed #c78b49;
+    /*    border-right-style: double;*/
+    border-radius: 10px 0px 0px 10px;
+}
+
+#butt2 {
+    border-radius: 0px 10px 10px 0px;
+
+}
+
+/* checkbox-rect */
+.checkbox-rect0 input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-rect0 input[type="checkbox"]+label {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 20px;
+    font: 14px/20px "Open Sans", Arial, sans-serif;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.checkbox-rect0 input[type="checkbox"]:hover+label:hover {
+    color: rgb(23, 86, 228);
+}
+
+.checkbox-rect0 input[type="checkbox"]:hover+label:before {
+    background: #50565a;
+    box-shadow: inset 0px 0px 0px 2px #f7f2f2;
+}
+
+.checkbox-rect0 input[type="checkbox"]+label:last-child {
+    margin-bottom: 0;
+}
+
+.checkbox-rect0 input[type="checkbox"]+label:before {
+    content: "";
+    display: block;
+    width: 1.4em;
+    height: 1.4em;
+    border: 1px solid #343a3f;
+    border-radius: 0.2em;
+    position: absolute;
+    left: 0;
+    margin-top: 10px;
+    -webkit-transition: all 0.2s, background 0.2s ease-in-out;
+    transition: all 0.2s, background 0.2s ease-in-out;
+    background: #f3f3f3;
+}
+
+.checkbox-rect0 input[type="checkbox"]:checked+label:before {
+    width: 1.3em;
+    height: 1.3em;
+    border-radius: 0.2em;
+    border: 2px solid #fff;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    background: #50565a;
+    box-shadow: 0 0 0 1px #000;
+}
