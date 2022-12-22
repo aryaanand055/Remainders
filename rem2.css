@@ -78,21 +78,6 @@
     background-color: RGB(205, 149, 117);
 }
 
-.fa-remove {
-    float: right;
-    margin-right: 10px;
-    visibility: hidden;
-}
-
-
-.list-content:hover .fa-remove {
-    visibility: visible;
-}
-
-.fa-remove:hover {
-    opacity: 0.9;
-    cursor: pointer;
-}
 
 .tasks-all {
     margin-left: 10px;
@@ -121,10 +106,6 @@
     text-shadow: 1px 1px 3px black;
 
 }
-
-/* #clear-tasks:focus {
-    outline: none;
-} */
 
 button:focus {
     outline: none;
@@ -202,11 +183,11 @@ button:focus {
 }
 
 .checkbox-rect0 input[type="checkbox"]:hover+label:hover {
-    color: rgb(23, 86, 228);
+    color: #ffc107;
 }
 
 .checkbox-rect0 input[type="checkbox"]:hover+label:before {
-    background: #50565a;
+    background: #ffc107;
     box-shadow: inset 0px 0px 0px 2px #f7f2f2;
 }
 
@@ -219,23 +200,35 @@ button:focus {
     display: block;
     width: 1.4em;
     height: 1.4em;
-    border: 1px solid #343a3f;
-    border-radius: 0.2em;
+    border: 2.5px solid #ffc107;
+    border-radius: 50%;
     position: absolute;
     left: 0;
     margin-top: 10px;
     -webkit-transition: all 0.2s, background 0.2s ease-in-out;
     transition: all 0.2s, background 0.2s ease-in-out;
-    background: #f3f3f3;
+    background: #f8f9fa
 }
 
 .checkbox-rect0 input[type="checkbox"]:checked+label:before {
     width: 1.3em;
     height: 1.3em;
-    border-radius: 0.2em;
-    border: 2px solid #fff;
+    border-radius: 50%;
+    border: 2px solid #f8f9fa;
     -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
-    background: #50565a;
-    box-shadow: 0 0 0 1px #000;
+    background: #ffc107;
+    box-shadow: 0 0 0 1px #ffc107;
+}
+
+.checkbox-rect0 input[type="checkbox"]:checked:hover+label:before {
+    border: 4px solid #f8f9fa;
+}
+
+#done li {
+    opacity: 0.45;
+}
+
+#done li .list_item_info {
+    text-decoration: line-through
 }

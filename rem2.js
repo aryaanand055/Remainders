@@ -273,23 +273,27 @@ function changeList(e) {
 }
 
 filter.onblur = function () {
-    // document.getElementById("container_message").innerHTML = ""
+    document.getElementById("container_message").innerHTML = ""
+    document.querySelectorAll(".list-group-item").forEach(task => {
+        task.style.display = "flex"
+    });
 }
 
 function filterTasks() {
     let count = 0;
     const filterValue = filter.value.toLowerCase();
-    console.log(filterValue)
     if (filterValue !== "") {
-        document.querySelectorAll(".list-content").forEach(filterTask);
+        document.querySelectorAll(".list-group-item").forEach(filterTask);
 
         function filterTask(task) {
-            const item = task.firstChild.textContent;
+            console.log(task)
+            const item = task.childNodes[1].childNodes[3].childNodes[1].childNodes[1].textContent
             if (item.toLowerCase().indexOf(filterValue) != -1) {
-                task.style.display = "block";
+                task.style.display = "flex";
                 count++;
             } else {
-                task.style.display = "none";
+                // task.style.display = "none";
+                task.style.setProperty("display", "none", "important")
             }
         }
         if (count === 0) {
@@ -298,6 +302,9 @@ function filterTasks() {
             displayMessage(`${count} tasks found`, 3000, "all")
         }
     } else {
+        // document.querySelectorAll(".list-group-item").forEach(task => {
+        //     task.style.display = "flex"
+        // });
         displayMessage("No input provided", 3000, "all")
     }
 
