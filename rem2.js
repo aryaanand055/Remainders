@@ -1,31 +1,21 @@
+//Declaring Variables
 const body = document.getElementById("body");
 const ulListTDo = document.getElementById("todo");
 const ulListDone = document.getElementById("done");
 const form = document.getElementById("taskForm");
 const formInput = document.getElementById("task");
-const clearAll = document.getElementById("clear-tasks");
 const filter = document.getElementById("filter");
 const lists = document.getElementById("lists");
-const button1 = document.getElementById("butt1")
-const button2 = document.getElementById("butt2")
 
-loadEventListeners();
-
-
-function loadEventListeners() {
-    button1.addEventListener("click", clearTasksTodo)
-    button2.addEventListener("click", clearTasksDone)
+//Adding event listeners
+(function () {
     form.addEventListener("submit", addTask);
-    ulListTDo.addEventListener("click", removeTaskTodo);
-    ulListDone.addEventListener("click", removeTaskDone);
     document.addEventListener("DOMContentLoaded", restoreFromLS);
     filter.addEventListener("keyup", filterTasks);
     lists.addEventListener("click", changeList);
-    clearAll.addEventListener("mouseenter", displayElement);
-    button1.addEventListener("mouseleave", displayElement2);
-    button2.addEventListener("mouseleave", displayElement2);
-}
+})()
 
+//Restores from local storage after load
 function restoreFromLS() {
     let ls;
     if (localStorage.getItem("tasksToDo") === null) {
@@ -72,21 +62,10 @@ function restoreFromLS() {
         <span class="badge badge-primary badge-pill text-bg-warning text-light ms-auto">${task.tag}</span>`
         ulListDone.appendChild(createdLi);
     })
-
     displayMessage("Page Loaded", 1000)
 }
-/* <li class="list-group-item d-flex justify-content-between align-items-center m-2 bg-light rounded">
-        <div class="checkbox-rect0">
-            <input type="checkbox" id="checkbox-rect10" name="check0">
-            <label for="checkbox-rect10">
-                <div class="list_item_info">
-                     <div class="list_item_name fw-bold">Cras justo odio</div>
-                     <div class="list_item_date fw-light fs-6">01/01/2023</div>
-                </div>
-            </label>
-        </div>
-        <span class="badge badge-primary badge-pill text-bg-warning text-light ms-auto">VIP</span>
-    </li> */
+
+//Function to add task to the list
 function addTask(e) {
     if (formInput.value === "") {
         alert("The input is blank");
@@ -117,28 +96,11 @@ function addTask(e) {
         }
         storeToLS(dataToStore, "todo");
         formInput.value = "";
-
         e.preventDefault();
     }
 }
 
-function removeTaskTodo(e) {
-    if (e.target.classList.contains("fa-remove")) {
-        e.target.parentElement.remove();
-        displayMessage("Task Removed", 3000)
-        deleteFromLS(e.target.parentElement, "todo")
-    }
-}
-
-function removeTaskDone(e) {
-    if (e.target.classList.contains("fa-remove")) {
-        e.target.parentElement.remove();
-        displayMessage("Task Removed", 3000)
-
-        deleteFromLS(e.target.parentElement, "done")
-    }
-}
-
+//Storing and deleting from Local storage
 function storeToLS(taskToStore, place) {
     console.log("Storing to LS" + "..." + taskToStore + "..." + place)
 
@@ -194,55 +156,7 @@ function deleteFromLS(itemToDel, place) {
     }
 }
 
-function clearTasksTodo() {
-    if (confirm("Are you sure you want to delete all todo tasks?")) {
-        const findList = ulListTDo.childNodes;
-        let arrr2 = [];
-        let ls;
-
-
-        findList.forEach(function (nodoNow) {
-            if (nodoNow.className === "list-content") {
-
-                arrr2.push(nodoNow)
-            }
-        })
-
-        arrr2.forEach(function (e) {
-            e.remove()
-        })
-        displayMessage("Tasks Cleared", 3000)
-        ls = localStorage.getItem("tasksToDo");
-        ls = JSON.stringify([]);
-
-        localStorage.setItem("tasksToDo", ls);
-    }
-}
-
-function clearTasksDone() {
-    if (confirm("Are you sure you want to delete all completed tasks?")) {
-        const findList = ulListDone.childNodes;
-        let arrr2 = [];
-        let ls;
-
-
-        findList.forEach(function (nodoNow) {
-            if (nodoNow.className === "list-content") {
-
-                arrr2.push(nodoNow)
-            }
-        })
-
-        arrr2.forEach(function (e) {
-            e.remove()
-        })
-        ls = localStorage.getItem("tasksDone");
-        ls = JSON.stringify([]);
-        localStorage.setItem("tasksDone", ls);
-    }
-
-}
-
+//Function to move list elements from todo to done and vice verca
 function changeList(e) {
     if (e.target.checked === true) {
         const moveTask = e.target.parentElement.parentElement;
@@ -272,6 +186,7 @@ function changeList(e) {
     }
 }
 
+//Filter Functions
 filter.onblur = function () {
     document.getElementById("container_message").innerHTML = ""
     document.querySelectorAll(".list-group-item").forEach(task => {
@@ -279,6 +194,7 @@ filter.onblur = function () {
     });
 }
 
+//Filters the list items with regard to the input
 function filterTasks() {
     let count = 0;
     const filterValue = filter.value.toLowerCase();
@@ -292,7 +208,6 @@ function filterTasks() {
                 task.style.display = "flex";
                 count++;
             } else {
-                // task.style.display = "none";
                 task.style.setProperty("display", "none", "important")
             }
         }
@@ -302,28 +217,13 @@ function filterTasks() {
             displayMessage(`${count} tasks found`, 3000, "all")
         }
     } else {
-        // document.querySelectorAll(".list-group-item").forEach(task => {
-        //     task.style.display = "flex"
-        // });
         displayMessage("No input provided", 3000, "all")
     }
 
 
 }
 
-
-function displayElement() {
-    clearAll.style.display = "none";
-    button1.style.display = "inline-block";
-    button2.style.display = "inline-block";
-}
-
-function displayElement2() {
-    button1.style.display = "none";
-    button2.style.display = "none";
-    clearAll.style.display = "inline-block";
-}
-
+//Custom Altert
 function displayMessage(message, time, clear = "single") {
     let messageCon = document.getElementById("container_message")
     if (clear === "all") {
