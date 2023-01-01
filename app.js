@@ -2,9 +2,20 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const app = express();
+app.set("view engine", "ejs")
+
+
+let today = new Date()
+day = today.getDay()
+
+
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html")
+    // res.sendFile(__dirname + "/index.html")
+    let name = "Stephen Strange"
+    res.render("list", {
+        title: name
+    })
 })
 app.get(/.css/, (req, res) => {
     res.sendFile(__dirname + "/rem2.css")

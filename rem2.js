@@ -1,6 +1,6 @@
 //Declaring Variables
 const body = document.getElementById("body");
-const ulListTDo = document.getElementById("todo");
+const ulListToDo = document.getElementById("todo");
 const ulListDone = document.getElementById("done");
 const form = document.getElementById("taskForm");
 const formInput = document.getElementById("task");
@@ -13,6 +13,7 @@ const lists = document.getElementById("lists");
     document.addEventListener("DOMContentLoaded", restoreFromLS);
     filter.addEventListener("keyup", filterTasks);
     lists.addEventListener("click", changeList);
+    document.addEventListener("DOMContentLoaded", emptyList);
 })()
 
 //Restores from local storage after load
@@ -37,7 +38,7 @@ function restoreFromLS() {
             </label>
         </div>
         <span class="badge badge-primary badge-pill text-bg-warning text-light ms-auto" id="task_tag">${task.tag}</span>`
-        ulListTDo.appendChild(createdLi);
+        ulListToDo.appendChild(createdLi);
     })
 
     let lsd;
@@ -87,7 +88,7 @@ function addTask(e) {
         </div>
         <span class="badge badge-primary badge-pill text-bg-warning text-light ms-auto" id ="task_tag">${tags}</span>`
         displayMessage("Task added", 3000)
-        ulListTDo.appendChild(createdLi);
+        ulListToDo.appendChild(createdLi);
         const dataToStore = {
             name: formInput.value,
             date: dateForLi,
@@ -98,12 +99,11 @@ function addTask(e) {
         formInput.value = "";
         e.preventDefault();
     }
+    emptyList()
 }
 
 //Storing and deleting from Local storage
 function storeToLS(taskToStore, place) {
-    console.log("Storing to LS" + "..." + taskToStore + "..." + place)
-
     if (place === "todo") {
         let ls;
         if (localStorage.getItem("tasksToDo") === null) {
@@ -126,7 +126,6 @@ function storeToLS(taskToStore, place) {
 }
 
 function deleteFromLS(itemToDel, place) {
-    console.log("Deltering from LS" + "..." + itemToDel + "..." + place)
     if (place === "todo") {
         let ls;
         if (localStorage.getItem("tasksToDo") === null) {
@@ -179,11 +178,11 @@ function changeList(e) {
                 moveLS = dataItem
             }
         })
-        console.log("Moving to todo" + moveLS)
         deleteFromLS(moveLS, "done");
         storeToLS(moveLS, "todo");
-        ulListTDo.appendChild(moveTask);
+        ulListToDo.appendChild(moveTask);
     }
+    emptyList()
 }
 
 //Filter Functions
@@ -239,4 +238,36 @@ function displayMessage(message, time, clear = "single") {
         // console.log(123)
         // }
     }, time)
+}
+
+//Alert if list is empty
+function emptyList() {
+    let emptyToDo = ulListToDo.lastElementChild.getAttribute("id") === "headingtodo";
+    let emptyDone = ulListDone.lastElementChild.getAttribute("id") === "headingdone";
+    let newElem = document.createElement("div")
+    newElem.classList = ""
+    if (emptyDone === true) {
+        let elem = document.createElement("div")
+        elem.classList = "bg-transparent opacity-50 text-center"
+        elem.textContent = "None of the tasks are completed"
+        elem.id = "doneAltert"
+        ulListDone.append(elem)
+        // ulListDone.style.display = "none"
+    } else {
+        if (document.getElementById("doneAlert") !== null) {
+            document.getElementById("doneAlert").remove()
+        }
+    }
+    if (emptyToDo === true) {
+        let elem = document.createElement("div")
+        elem.classList = "bg-transparent opacity-50 text-center"
+        elem.textContent = "All tasks completed"
+        elem.id = "todoAlert"
+        ulListToDo.append(elem)
+        // ulListToDo.style.display = "none"
+    } else {
+        if (document.getElementById("todoAlert") !== null) {
+            document.getElementById("todoAlert").remove()
+        }
+    }
 }
