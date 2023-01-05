@@ -6,15 +6,103 @@ const form = document.getElementById("taskForm");
 const formInput = document.getElementById("task");
 const filter = document.getElementById("filter");
 const lists = document.getElementById("lists");
+const contextMenu = document.getElementById("context_menu");
+const liElements = document.getElementsByTagName("li")
+const deleteMenu = document.getElementById("context_menu_delete")
+// console.log(liElements)
 
 //Adding event listeners
-(function () {
-    form.addEventListener("submit", addTask);
-    document.addEventListener("DOMContentLoaded", restoreFromLS);
-    filter.addEventListener("keyup", filterTasks);
-    lists.addEventListener("click", changeList);
-    document.addEventListener("DOMContentLoaded", emptyList);
-})()
+
+form.addEventListener("submit", addTask);
+document.addEventListener("DOMContentLoaded", restoreFromLS);
+filter.addEventListener("keyup", filterTasks);
+lists.addEventListener("click", changeList);
+document.addEventListener("DOMContentLoaded", emptyList);
+document.addEventListener("contextmenu", contextMenuFun)
+document.addEventListener("click", contextMenuClose)
+
+let currentDel = "";
+//Custom Context Menu
+function contextMenuFun(event) {
+    event.preventDefault()
+    if (event.target.className.slice(0, 15) === "list-group-item") {
+
+        const {
+            clientX,
+            clientY
+        } = event;
+
+        const {
+            normalizedX,
+            normalizedY
+        } = normalizePozition(clientX, clientY)
+        contextMenu.style.top = `${normalizedY}px`
+        contextMenu.style.left = `${normalizedX}px`
+        contextMenu.classList.remove("visible")
+        setTimeout(() => {
+            contextMenu.classList.add("visible")
+        })
+    }
+    currentDel = {
+        li: event.target,
+        list: event.target.parentElement.id
+    }
+}
+deleteMenu.addEventListener("click", () => {
+    deleteListItem()
+})
+
+function deleteListItem() {
+    deleteFromLS(currentDel.li, currentDel.list)
+    contextMenu.classList.remove("visible")
+    displayMessage("List item Deleted...", 1000, "single")
+    currentDel.li.remove();
+    emptyList()
+}
+
+
+function contextMenuClose(e) {
+    if (e.target.offsetParent != contextMenu) {
+        contextMenu.classList.remove("visible")
+    }
+}
+const normalizePozition = (mouseX, mouseY) => {
+    // ? compute what is the mouse position relative to the container element (body)
+    const {
+        left: bodyOffsetX,
+        top: bodyOffsetY,
+    } = body.getBoundingClientRect();
+
+    const bodyX = mouseX - bodyOffsetX;
+    const bodyY = mouseY - bodyOffsetY;
+
+    // ? check if the element will go out of bounds
+    const outOfBoundsOnX =
+        bodyX + contextMenu.clientWidth > body.clientWidth;
+
+    const outOfBoundsOnY =
+        bodyY + contextMenu.clientHeight > body.clientHeight;
+
+    let normalizedX = mouseX;
+    let normalizedY = mouseY;
+
+    // ? normalzie on X
+    if (outOfBoundsOnX) {
+        normalizedX =
+            bodyOffsetX + body.clientWidth - contextMenu.clientWidth;
+    }
+
+    // ? normalize on Y
+    if (outOfBoundsOnY) {
+        normalizedY =
+            bodyOffsetY + body.clientHeight - contextMenu.clientHeight;
+    }
+
+    return {
+        normalizedX,
+        normalizedY
+    };
+};
 
 //Restores from local storage after load
 function restoreFromLS() {
@@ -235,36 +323,36 @@ function displayMessage(message, time, clear = "single") {
         if (clear === "single") {
             document.querySelectorAll("#messageCon")[document.querySelectorAll("#messageCon").length - 1].parentElement.remove()
         }
-        // console.log(123)
-        // }
     }, time)
 }
 
 //Alert if list is empty
 function emptyList() {
-    let emptyToDo = ulListToDo.lastElementChild.getAttribute("id") === "headingtodo";
-    let emptyDone = ulListDone.lastElementChild.getAttribute("id") === "headingdone";
+    let emptyToDo = ulListToDo.lastElementChild.getAttribute("id") === "headingtodo" || ulListToDo.lastElementChild.getAttribute("id") === "todoAlert"
+    let emptyDone = ulListDone.lastElementChild.getAttribute("id") === "headingdone" || ulListDone.lastElementChild.getAttribute("id") === "doneAlert";
     let newElem = document.createElement("div")
     newElem.classList = ""
     if (emptyDone === true) {
-        let elem = document.createElement("div")
-        elem.classList = "bg-transparent opacity-50 text-center"
-        elem.textContent = "None of the tasks are completed"
-        elem.id = "doneAltert"
-        ulListDone.append(elem)
-        // ulListDone.style.display = "none"
+        if (document.getElementById("doneAlert") === null) {
+            let elem = document.createElement("div")
+            elem.classList = "bg-transparent opacity-50 text-center"
+            elem.textContent = "None of the tasks are completed"
+            elem.id = "doneAlert"
+            ulListDone.append(elem)
+        }
     } else {
         if (document.getElementById("doneAlert") !== null) {
             document.getElementById("doneAlert").remove()
         }
     }
     if (emptyToDo === true) {
-        let elem = document.createElement("div")
-        elem.classList = "bg-transparent opacity-50 text-center"
-        elem.textContent = "All tasks completed"
-        elem.id = "todoAlert"
-        ulListToDo.append(elem)
-        // ulListToDo.style.display = "none"
+        if (document.getElementById("todoAlert") === null) {
+            let elem = document.createElement("div")
+            elem.classList = "bg-transparent opacity-50 text-center"
+            elem.textContent = "All tasks completed"
+            elem.id = "todoAlert"
+            ulListToDo.append(elem)
+        }
     } else {
         if (document.getElementById("todoAlert") !== null) {
             document.getElementById("todoAlert").remove()

@@ -1,5 +1,9 @@
 /* Custom CSS Styling for some elements */
 
+html {
+    height: 100%;
+}
+
 /* For the checkboxes */
 .checkbox-rect0 input[type="checkbox"] {
     display: none;
@@ -67,4 +71,35 @@
 
 #done li .list_item_info {
     text-decoration: line-through
+}
+
+/* Context Menu */
+.context_menu {
+    position: fixed;
+    z-index: 10000;
+    width: 150px;
+    background: #ffffff;
+    border-radius: 5%;
+    transform: scale(0);
+    transform-origin: top left;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+        rgba(17, 17, 26, 0.1) 0px 8px 24px,
+        rgba(17, 17, 26, 0.1) 0px 16px 56px;
+}
+
+.context_menu.visible {
+    transform: scale(1);
+    transition: transform 100ms ease-in-out;
+}
+
+.context_menu .item {
+    padding: 8px 10px;
+    font-size: 15px;
+    color: rgb(77, 77, 77);
+    cursor: pointer;
+    border-radius: inherit;
+}
+
+.context_menu .item:hover {
+    background: #d4d4d4;
 }
