@@ -4,15 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task List</title>
-    <link rel="stylesheet" href="rem2.css">
+    <!-- <title>Task List</title> -->
+    <!-- <link rel="stylesheet" href="rem2.css"> -->
 
     <!--  This is for the remove symbol  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 
     <!--This is for the loaders-->
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 
     <!-- Bootstrap -->
 
@@ -38,40 +38,34 @@
                 <h4 id="heading-todo"><%=day%></h4>
             </div>
             <div class="col">
-                <form id="taskForm" autocomplete="off">
+                <form id="taskForm" autocomplete="off" action="/" method="post">
                     <div class="w-75 m-auto">
-                        <input type="text" class="form-control" id="task" placeholder="Example: Buy eggs #shop"
-                            class="input-remainder" spellcheck="false" autofocus>
+                        <input type="text" class="form-control" placeholder="Input Here" name="input_remainder"
+                            spellcheck="false" autofocus>
                     </div>
                 </form>
             </div>
         </div>
-
-        <div class="col m-3" id="container_message">
+        <!-- <div class="col m-3" id="container_message">
             <div class="alert alert-primary msg-cstm invsbl" role="alert" id="messageCon">
                 <div id="message"><strong id="message_here"></strong></div>
             </div>
-        </div>
+        </div> -->
         <div class="col">
             <input type="text" id="filter" class="filter form-control w-75 m-auto m-3 mb-4" placeholder="Filter">
         </div>
         <div id="lists" class="w-75 m-auto">
             <ul class="collection col1 list-group" id="todo">
                 <h4 id="headingtodo" class="ulHeadings">To-Do</h4>
+                <%newItem.forEach(item=>{%>
+                <li class="list-item w-75"><%=item%></li>
+                <%})%>
             </ul>
             <ul class="collection col2 list-group" id="done">
                 <h4 id="headingdone" class="ulHeadings">Completed</h4>
             </ul>
         </div>
     </div>
-    <div class="context_menu" id="context_menu">
-        <div class="item" id="context_menu_delete">Delete</div>
-        <!-- <div class="item">Duplicate</div> -->
-        <!-- <div class="item">Delete All</div> -->
-        <!-- <div class="item">Duplicate All</div> -->
-    </div>
-    <script src="rem2.js"></script>
-
 </body>
 
 </html>

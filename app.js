@@ -5,16 +5,23 @@ const app = express();
 app.set("view engine", "ejs")
 
 
-let today = new Date()
-day = today.getDay()
+let options = {
+    weekday: "long",
+    day: "2-digit",
+    hour: "numeric",
+    month: "short",
+    minute: "numeric",
+}
 
 
+day = new Date().toLocaleDateString("EN-us", options)
 
 app.get("/", (req, res) => {
     // res.sendFile(__dirname + "/index.html")
-    let name = "Stephen Strange"
+    let name = "Arya"
     res.render("list", {
-        title: name
+        title: name,
+        day: day
     })
 })
 app.get(/.css/, (req, res) => {
