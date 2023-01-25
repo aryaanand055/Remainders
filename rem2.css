@@ -73,6 +73,24 @@ html {
     text-decoration: line-through
 }
 
+/* Message */
+.msg-cstm {
+    z-index: 100;
+    position: fixed !important;
+    top: 20px;
+    width: 30%;
+    left: 35%;
+    text-align: center;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px,
+        rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+    transition-duration: 100ms;
+}
+
+.invsbl {
+    transform: translateY(-100px);
+}
+
+
 /* Context Menu */
 .context_menu {
     position: fixed;
@@ -102,4 +120,27 @@ html {
 
 .context_menu .item:hover {
     background: #d4d4d4;
+}
+
+/* Scroll Bar */
+
+/* *:hover::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+} */
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(96, 96, 96);
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #5a5a5a;
 }

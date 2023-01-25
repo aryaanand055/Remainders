@@ -39,7 +39,7 @@
             <div class="col">
                 <form id="taskForm" autocomplete="off">
                     <div class="w-75 m-auto">
-                        <input type="text" class="form-control" id="task" placeholder="Enter task here: "
+                        <input type="text" class="form-control" id="task" placeholder="Example: Buy eggs #shop"
                             class="input-remainder" spellcheck="false" autofocus>
                     </div>
                 </form>
@@ -47,6 +47,9 @@
         </div>
 
         <div class="col m-3" id="container_message">
+            <div class="alert alert-primary msg-cstm invsbl" role="alert" id="messageCon">
+                <div id="message"><strong id="message_here"></strong></div>
+            </div>
         </div>
         <div class="col">
             <input type="text" id="filter" class="filter form-control w-75 m-auto m-3 mb-4" placeholder="Filter">

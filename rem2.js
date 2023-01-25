@@ -55,7 +55,6 @@ deleteMenu.addEventListener("click", () => {
 function deleteListItem() {
     deleteFromLS(currentDel.li, currentDel.list)
     contextMenu.classList.remove("visible")
-    displayMessage("List item Deleted...", 1000, "single")
     currentDel.li.remove();
     emptyList()
 }
@@ -114,8 +113,16 @@ function restoreFromLS() {
     }
     ls.forEach(task => {
         const createdLi = document.createElement("li");
-        createdLi.classList = "list-group-item d-flex justify-content-between align-items-center m-2 bg-light rounded";
+        createdLi.classList = "list-group-item d-flex align-items-center m-2 bg-light rounded";
         createdLi.id = task.id
+        tags = ""
+        task.tag.forEach((e, index) => {
+            if (index === 0) {
+                tags = tags.concat(`<span class="badge badge-primary badge-pill text-bg-warning text-light" style="margin-left:auto" id ="task_tag">${e}</span>`)
+            } else {
+                tags = tags.concat(`<span class="badge badge-primary badge-pill text-bg-warning text-light m-2" id ="task_tag">${e}</span>`)
+            }
+        })
         createdLi.innerHTML = ` <div class="checkbox-rect0">
             <input type="checkbox" id="${task.name}" name="check0">
             <label for="${task.name}">
@@ -125,7 +132,7 @@ function restoreFromLS() {
                 </div>
             </label>
         </div>
-        <span class="badge badge-primary badge-pill text-bg-warning text-light ms-auto" id="task_tag">${task.tag}</span>`
+        ${tags}`
         ulListToDo.appendChild(createdLi);
     })
 
@@ -137,8 +144,16 @@ function restoreFromLS() {
     }
     lsd.forEach(function (task) {
         const createdLi = document.createElement("li");
-        createdLi.classList = "list-group-item d-flex justify-content-between align-items-center m-2 bg-light rounded";
+        createdLi.classList = "list-group-item d-flex align-items-center m-2 bg-light rounded";
         createdLi.id = task.id
+        tags = ""
+        task.tag.forEach((e, index) => {
+            if (index === 0) {
+                tags = tags.concat(`<span class="badge badge-primary badge-pill text-bg-warning text-light" style="margin-left:auto" id ="task_tag">${e}</span>`)
+            } else {
+                tags = tags.concat(`<span class="badge badge-primary badge-pill text-bg-warning text-light m-2" id ="task_tag">${e}</span>`)
+            }
+        })
         createdLi.innerHTML = ` <div class="checkbox-rect0">
             <input type="checkbox" id="${task.name}" name="check0" checked="true">
             <label for="${task.name}">
@@ -148,40 +163,51 @@ function restoreFromLS() {
                 </div>
             </label>
         </div>
-        <span class="badge badge-primary badge-pill text-bg-warning text-light ms-auto">${task.tag}</span>`
+        ${tags}`
         ulListDone.appendChild(createdLi);
     })
-    displayMessage("Page Loaded", 1000)
 }
 
 //Function to add task to the list
 function addTask(e) {
     if (formInput.value === "") {
-        alert("The input is blank");
         e.preventDefault();
     } else {
         const createdLi = document.createElement("li");
         const dateForLi = new Date().getFullYear()
-        const tags = "VIP"
-        createdLi.classList = "list-group-item d-flex justify-content-between align-items-center m-2 bg-light rounded";
-        createdLi.id = formInput.value + dateForLi
+
+        input_splitted = formInput.value.split("#")
+
+        inputValue = input_splitted[0]
+        let tags = "";
+        input_splitted.shift()
+        input_splitted.forEach((tag, index) => {
+            if (index === 0) {
+                tags = tags.concat(`<span class="badge badge-primary badge-pill text-bg-warning text-light" style="margin-left:auto" id ="task_tag">${tag}</span>`)
+            } else {
+                tags = tags.concat(`<span class="badge badge-primary badge-pill text-bg-warning text-light m-2" id ="task_tag">${tag}</span>`)
+            }
+        })
+
+        createdLi.classList = "list-group-item d-flex align-items-center m-2 bg-light rounded";
+        createdLi.id = inputValue + dateForLi
+
         createdLi.innerHTML = ` <div class="checkbox-rect0">
-            <input type="checkbox" id="${formInput.value}" name="check0">
-            <label for="${formInput.value}">
+            <input type="checkbox" id="${inputValue}" name="check0">
+            <label for="${inputValue}">
                 <div class="list_item_info">
-                     <div class="list_item_name fw-bold" id="task_name">${formInput.value}</div>
+                     <div class="list_item_name fw-bold" id="task_name">${inputValue}</div>
                      <div class="list_item_date fw-light fs-6" id="task_date">${dateForLi}</div>
                 </div>
             </label>
         </div>
-        <span class="badge badge-primary badge-pill text-bg-warning text-light ms-auto" id ="task_tag">${tags}</span>`
-        displayMessage("Task added", 3000)
+       ${tags}`
         ulListToDo.appendChild(createdLi);
         const dataToStore = {
-            name: formInput.value,
+            name: inputValue,
             date: dateForLi,
-            tag: tags,
-            id: formInput.value + dateForLi
+            tag: input_splitted,
+            id: inputValue + dateForLi
         }
         storeToLS(dataToStore, "todo");
         formInput.value = "";
@@ -275,7 +301,7 @@ function changeList(e) {
 
 //Filter Functions
 filter.onblur = function () {
-    document.getElementById("container_message").innerHTML = ""
+    messageCon.classList.add("invsbl")
     document.querySelectorAll(".list-group-item").forEach(task => {
         task.style.display = "flex"
     });
@@ -289,7 +315,6 @@ function filterTasks() {
         document.querySelectorAll(".list-group-item").forEach(filterTask);
 
         function filterTask(task) {
-            console.log(task)
             const item = task.childNodes[1].childNodes[3].childNodes[1].childNodes[1].textContent
             if (item.toLowerCase().indexOf(filterValue) != -1) {
                 task.style.display = "flex";
@@ -299,31 +324,25 @@ function filterTasks() {
             }
         }
         if (count === 0) {
-            displayMessage("No tasks found", 3000, "all")
+            displayMessage("No tasks found")
         } else {
-            displayMessage(`${count} tasks found`, 3000, "all")
+            displayMessage(`${count} tasks found`)
         }
     } else {
-        displayMessage("No input provided", 3000, "all")
+        document.querySelectorAll(".list-group-item").forEach(task => {
+            task.style.display = "flex"
+        });
+        displayMessage("No input provided")
     }
 
 
 }
 
 //Custom Altert
-function displayMessage(message, time, clear = "single") {
-    let messageCon = document.getElementById("container_message")
-    if (clear === "all") {
-        messageCon.innerHTML = ""
-    }
-    alert = document.createElement("div")
-    alert.innerHTML = `<div class="alert alert-primary fade show p-2 ps-3 w-25 m-auto my-3 text-center" role="alert" id="messageCon"><div id="message"><strong>${message}</strong></div></div>`;
-    messageCon.appendChild(alert)
-    setTimeout(() => {
-        if (clear === "single") {
-            document.querySelectorAll("#messageCon")[document.querySelectorAll("#messageCon").length - 1].parentElement.remove()
-        }
-    }, time)
+function displayMessage(message) {
+    let messageCon = document.getElementById("messageCon")
+    document.getElementById("message_here").textContent = message;
+    messageCon.classList.remove("invsbl")
 }
 
 //Alert if list is empty
