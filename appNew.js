@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express()
 const bodyparser = require("body-parser")
-
+app.use(express.static("\public"))
 app.use(bodyparser.urlencoded({
     extended: true
 }))
@@ -26,7 +26,8 @@ app.route("/")
         })
     })
     .post((req, res) => {
-        items.push(res.body.newItem)
+        console.log(123)
+        items.push(req.body.newItem)
         res.redirect("/")
     })
 
