@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="en-in">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <title>To-Do Web App</title>
-</head>
+<%- include("header")%>
 
 <body>
     <div class="box" id="heading">
         <h2 id="heading-todo">Hi there <%=title%>!</h2>
-        <h4 id="heading-todo"><%=day%></h4>
+        <h4 id="heading-todo"><%=info%></h4>
     </div>
     <div id="lists" class="box">
         <%newItem.forEach(item=>{%>
@@ -23,9 +15,9 @@
         <form id="taskForm" autocomplete="off" action="/" method="post" class="item">
             <input type="text" class="form-control" placeholder="Input Here" name="newItem" spellcheck="false"
                 autofocus>
-            <button type="submit" name="button">+</button>
+            <button type="submit" name="list" value="<%=info%>">+</button>
         </form>
     </div>
 </body>
 
-</html>
+<%- include("footer")%>
