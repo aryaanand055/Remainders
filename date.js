@@ -1,10 +1,13 @@
-function getDay() {
-    options = {
+exports.getTime = function () {
+    return new Date().toLocaleDateString("EN-us", {
+        minute: "2-digit",
+        hour: "2-digit"
+    })
+}
+exports.getDay = function () {
+    return new Date().toLocaleDateString("EN-us", {
         weekday: "long",
         day: "2-digit",
-        hour: "numeric",
-        month: "short",
-        minute: "numeric"
-    }
-    return new Date().toLocaleDateString("EN-us", options)
+        month: "short"
+    })
 }

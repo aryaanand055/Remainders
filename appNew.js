@@ -1,7 +1,5 @@
 // Importing and using express
 const express = require("express")
-
-
 const app = express()
 
 //Importing and using bodyparser(for getting data from the webpage)
@@ -11,8 +9,15 @@ app.use(bodyparser.urlencoded({
     extended: true
 }))
 
+
+
+const items = ["Sample Task"]
+const workItems = ["Work Task"]
+
+
 //Custom Module
 const date = require(__dirname + "/date.js")
+let day = date.getDay()
 
 //Allows static files to be used
 app.use(express.static("\public"))
@@ -21,10 +26,8 @@ app.use(express.static("\public"))
 app.set("view engine", "ejs")
 
 
-items = ["Sample Task"]
-workItems = ["Work Task"]
 
-
+//Home Route
 app.route("/")
     .get((req, res) => {
         res.render("list1", {
@@ -45,6 +48,8 @@ app.route("/")
             res.redirect("/")
         }
     })
+
+//Work route
 app.route("/work")
     .get((req, res) => {
         res.render("list1", {
