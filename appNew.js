@@ -9,11 +9,12 @@ app.use(bodyparser.urlencoded({
     extended: true
 }))
 
+// For database
+const database = require("./database")
 
 
-const items = ["Sample Task"]
-const workItems = ["Work Task"]
-
+let items = ["Sample Task"]
+let workItems = ["Work Task"]
 
 //Custom Module
 const date = require(__dirname + "/date.js")
@@ -30,14 +31,22 @@ app.set("view engine", "ejs")
 //Home Route
 app.route("/")
     .get((req, res) => {
-        res.render("list1", {
-            title: "Arya",
-            info: day,
-            newItem: items
+        let itemsTitle = []
+
+        database.getAll().then(e => {
+            e.tasksArray.forEach(j => {
+                itemsTitle.push(j.title)
+            })
+
+            res.render("list1", {
+                title: "Arya",
+                info: day,
+                newItem: itemsTitle
+            })
         })
+
     })
     .post((req, res) => {
-        console.log(req.body)
         if (req.body.list === "Work") {
             workItems.push(req.body.newItem)
             res.redirect("/work")
@@ -45,7 +54,10 @@ app.route("/")
         } else {
 
             items.push(req.body.newItem)
-            res.redirect("/")
+            database.insertOne("todo", req.body.newItem).then(() => {
+
+                res.redirect("/")
+            })
         }
     })
 
@@ -65,6 +77,8 @@ app.route("/about")
     .get((req, res) => {
         res.render("about")
     })
+
+
 
 app.listen(5050, () => {
 
