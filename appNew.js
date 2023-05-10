@@ -1,3 +1,5 @@
+const portToListen = 5050
+
 // Importing and using express
 const express = require("express")
 const app = express()
@@ -9,22 +11,19 @@ app.use(bodyparser.urlencoded({
     extended: true
 }))
 
-// For database
-const database = require("./database")
-
-
-let items = ["Sample Task"]
-let workItems = ["Work Task"]
-
-//Custom Module
-const date = require(__dirname + "/date.js")
-let day = date.getDay()
-
 //Allows static files to be used
 app.use(express.static("\public"))
 
 //Sets the default view engine to ejs templates
 app.set("view engine", "ejs")
+
+// For database
+const database = require("./database")
+
+
+//Custom Module
+const date = require(__dirname + "/date.js")
+let day = date.getDay()
 
 
 
@@ -33,12 +32,11 @@ app.route("/")
     .get((req, res) => {
         let itemsTitle = []
 
-        database.getAll().then(e => {
+        database.getAll("tasks").then(e => {
             e.tasksArray.forEach(j => {
-                itemsTitle.push(j.title)
+                itemsTitle.push(j)
             })
-
-            res.render("list1", {
+            res.render("home", {
                 title: "Arya",
                 info: day,
                 newItem: itemsTitle
@@ -48,14 +46,11 @@ app.route("/")
     })
     .post((req, res) => {
         if (req.body.list === "Work") {
-            workItems.push(req.body.newItem)
-            res.redirect("/work")
-
+            database.insertOne("todo", req.body.newItem, "workTasks").then(() => {
+                res.redirect("/work")
+            })
         } else {
-
-            items.push(req.body.newItem)
-            database.insertOne("todo", req.body.newItem).then(() => {
-
+            database.insertOne("todo", req.body.newItem, "tasks").then(() => {
                 res.redirect("/")
             })
         }
@@ -64,11 +59,19 @@ app.route("/")
 //Work route
 app.route("/work")
     .get((req, res) => {
-        res.render("list1", {
-            title: "Arya",
-            info: "Work",
-            newItem: workItems
+        let items = []
+        database.getAll("workTasks").then(e => {
+            e.tasksArray.forEach(j => {
+                items.push(j)
+            })
+
+            res.render("home", {
+                title: "Arya",
+                info: "Work",
+                newItem: items
+            })
         })
+
     })
 
 
@@ -80,7 +83,7 @@ app.route("/about")
 
 
 
-app.listen(5050, () => {
+app.listen(portToListen, () => {
 
-    console.log("Listening on port 5050")
+    console.log(`Listening on port ${portToListen}`)
 })

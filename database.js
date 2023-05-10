@@ -2,14 +2,14 @@ const {
     MongoClient
 } = require("mongodb");
 
-
-let getAll = async function () {
-    const client = new MongoClient("mongodb+srv://Phoenix:Cookies@to-do-list.lifrbmd.mongodb.net/?retryWrites=true&w=majority")
-    const db = client.db("To-Do-List");
-    let list = db.collection("tasks");
-
+let getAll = async function (listToGet) {
+    let url = "mongodb+srv://phoenix:cookies@todolistheroku.kn4l80i.mongodb.net/?retryWrites=true&w=majority";
+    const client = new MongoClient(url)
+    const db = client.db("data");
+    let list = db.collection(listToGet);
     try {
         let tasksArray = await list.find({}).toArray();
+        console.log(123)
         return {
             tasksArray
         }
@@ -21,18 +21,20 @@ let getAll = async function () {
 }
 
 
-let insertOne = async function (listToAdd, title) {
-    const client = new MongoClient("mongodb+srv://Phoenix:Cookies@to-do-list.lifrbmd.mongodb.net/?retryWrites=true&w=majority")
-    const db = client.db("To-Do-List");
-    let list = db.collection("tasks");
+let insertOne = async function (stat, title, listToAdd) {
+    let url = "mongodb+srv://phoenix:cookies@todolistheroku.kn4l80i.mongodb.net/?retryWrites=true&w=majority";
+
+    const client = new MongoClient(url)
+    const db = client.db("data");
+    let list = db.collection(listToAdd);
 
     try {
-        if (listToAdd === "todo") {
+        if (stat === "todo") {
             await list.insertOne({
                 title,
                 done: false
             });
-        } else if (listToAdd === "done") {
+        } else if (stat === "done") {
             await list.insertOne({
                 title,
                 done: true
