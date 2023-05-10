@@ -1,4 +1,1 @@
-Contains Bootstrap and basic CSS for styling
-Contains Javascript -- Both frontend and backend(optional)
-Uses NPM modules(optional)
-Stores to Local Storage
+A to-do list app using backend... Uses mongodb cloud for storage... Uses express and node.js
