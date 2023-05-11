@@ -6,6 +6,7 @@ const app = express()
 
 //Importing and using bodyparser(for getting data from the webpage)
 const bodyparser = require("body-parser")
+
 //Allows for the use of the body parser
 app.use(bodyparser.urlencoded({
     extended: true
@@ -24,7 +25,6 @@ const database = require("./database")
 //Custom Module
 const date = require(__dirname + "/date.js")
 let day = date.getDay()
-
 
 
 //Home Route
@@ -60,6 +60,7 @@ app.route("/")
 app.route("/work")
     .get((req, res) => {
         let items = []
+
         database.getAll("workTasks").then(e => {
             e.tasksArray.forEach(j => {
                 items.push(j)
@@ -71,19 +72,13 @@ app.route("/work")
                 newItem: items
             })
         })
-
     })
-
-
 
 app.route("/about")
     .get((req, res) => {
         res.render("about")
     })
 
-
-
 app.listen(portToListen, () => {
-
     console.log(`Listening on port ${portToListen}`)
 })
