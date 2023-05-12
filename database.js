@@ -1,83 +1,70 @@
-// Connect and configure to MongoDB Atlas
 const mongoose = require("mongoose");
-
 require('dotenv').config();
 
-mongoose.connect(
-    process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    }
-);
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 const taskSchema = new mongoose.Schema({
     title: String,
     done: Boolean,
+    list: String,
 });
 
 const Task = mongoose.model("task", taskSchema);
-const WorkTask = mongoose.model("worktask", taskSchema);
 
-// Function to get all tasks from the specified list
 async function getAll(listToGet) {
     try {
-        if (listToGet === "tasks") {
-            const tasksArray = await Task.find({});
-            return {
-                tasksArray
-            };
-        } else if (listToGet === "workTasks") {
-            const tasksArray = await WorkTask.find({});
-            return {
-                tasksArray
-            };
-        }
+        const tasksArray = await Task.find({
+            list: listToGet
+        });
+        return {
+            tasksArray
+        };
     } catch (err) {
-        console.log(err.stack);
+        console.error(err.stack);
+        return {
+            error: "Could not get tasks"
+        };
     }
 }
 
-// Function to insert a new task into the specified list
-async function insertOne(title, listToAdd) {
+async function insertOne(title, list) {
     try {
-        if (listToAdd === "tasks") {
-            await Task.create({
-                title: title,
-                done: false
-            });
-        } else if (listToAdd === "workTasks") {
-            await WorkTask.create({
-                title: title,
-                done: false
-            });
-        }
+        await Task.create({
+            title,
+            done: false,
+            list
+        });
         return "Successfully added";
     } catch (err) {
-        console.log(err.stack);
+        console.error(err.stack);
+        return {
+            error: "Could not add task"
+        };
     }
 }
-async function updateOne(list, task, done) {
+
+async function updateOne(list, title, done) {
     try {
-        if (list === "tasks") {
-            await Task.updateOne({
-                title: task
-            }, {
-                done: done
-            });
-        } else if (list === "workTasks") {
-            await WorkTask.updateOne({
-                title: task
-            }, {
-                done: done
-            });
-        }
+        await Task.updateOne({
+            title,
+            list
+        }, {
+            done
+        });
         return "Successfully updated";
-    } catch {
-        console.log(err.stack);
+    } catch (err) {
+        console.error(err.stack);
+        return {
+            error: "Could not update task"
+        };
     }
 }
+
 module.exports = {
     getAll,
     insertOne,
-    updateOne
+    updateOne,
 };

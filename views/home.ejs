@@ -3,7 +3,7 @@
 <body>
     <div class="box" id="heading">
         <h2 id="heading-todo">Hi there <%=title%>!</h2>
-        <h4 id="heading-todo"><%=info%></h4>
+        <h4 id="heading-info"><%=list%></h4>
     </div>
     <div id="lists" class="box">
         <%newItem.forEach(item=>{%>
@@ -20,7 +20,7 @@
             <form id="taskForm" autocomplete="off" action="/" method="post" class="item">
                 <input type="text" id="task_input" class="form-control" placeholder="Input Here" name="newItem"
                     spellcheck="false" autofocus required>
-                <button type="submit" name="list" value="<%=info%>">+</button>
+                <button type="submit" name="list" value="<%=list%>">+</button>
             </form>
         </div>
         <script src="/js/script.js"></script>

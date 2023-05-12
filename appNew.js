@@ -25,9 +25,9 @@ app.use(express.json());
 const database = require("./database")
 
 
-//Custom Module
-const date = require(__dirname + "/date.js")
-let day = date.getDay()
+// //Custom Module
+// const date = require(__dirname + "/date.js")
+// let day = date.getDay()
 
 
 //Home Route
@@ -35,13 +35,13 @@ app.route("/")
     .get((req, res) => {
         let itemsTitle = []
 
-        database.getAll("tasks").then(e => {
+        database.getAll("home").then(e => {
             e.tasksArray.forEach(j => {
                 itemsTitle.push(j)
             })
             res.render("home", {
                 title: "Arya",
-                info: day,
+                list: "home",
                 newItem: itemsTitle
             })
         })
@@ -49,12 +49,12 @@ app.route("/")
     })
     .put((req, res) => {
         console.log(req.body)
-        if (req.body.list === "Work") {
-            database.insertOne(req.body.title, "workTasks").then(() => {
+        if (req.body.list === "work") {
+            database.insertOne(req.body.title, "work").then(() => {
                 // res.redirect("/work")
             })
         } else {
-            database.insertOne(req.body.title, "tasks").then(() => {
+            database.insertOne(req.body.title, "home").then(() => {
                 // res.redirect("/")
             })
         }
@@ -66,14 +66,14 @@ app.route("/work")
     .get((req, res) => {
         let items = []
 
-        database.getAll("workTasks").then(e => {
+        database.getAll("work").then(e => {
             e.tasksArray.forEach(j => {
                 items.push(j)
             })
 
             res.render("home", {
                 title: "Arya",
-                info: "Work",
+                list: "work",
                 newItem: items
             })
         })
@@ -86,7 +86,8 @@ app.route("/about")
 
 app.route("/update-item")
     .put((req, res) => {
-        database.updateOne("tasks", req.body.title, req.body.done)
+        console.log(req.body.list, req.body.title, req.body.done)
+        database.updateOne(req.body.list, req.body.title, req.body.done)
         res.sendStatus(200);
     });
 

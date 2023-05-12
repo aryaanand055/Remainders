@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Get the title of the item associated with the checkbox
             const title = event.target.nextElementSibling.textContent.trim();
             const done = event.target.checked;
-
+            const list = document.getElementById("heading-info").textContent
             // Make an HTTP request to update the database
             let requests = {
                 method: 'put',
@@ -17,8 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    list: list,
                     title: title,
-                    done: done
+                    done: done,
+
                 })
             }
             fetch('/update-item', requests)
@@ -47,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Clear the form
         document.querySelector("#task_input").value = ""
-
+        const list = document.getElementById("heading-info").textContent
         const request = {
             method: 'put',
             headers: {
@@ -55,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify({
                 title: val,
-                list: "tasks"
+                list: list
             })
         };
 
