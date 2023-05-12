@@ -1,8 +1,10 @@
 // Connect and configure to MongoDB Atlas
 const mongoose = require("mongoose");
 
+require('dotenv').config();
+
 mongoose.connect(
-    "mongodb+srv://phoenix:cookies@todolistheroku.kn4l80i.mongodb.net/data", {
+    process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     }
