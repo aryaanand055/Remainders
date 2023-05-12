@@ -18,8 +18,8 @@
             </div>
             <%})%>
             <form id="taskForm" autocomplete="off" action="/" method="post" class="item">
-                <input type="text" class="form-control" placeholder="Input Here" name="newItem" spellcheck="false"
-                    autofocus>
+                <input type="text" id="task_input" class="form-control" placeholder="Input Here" name="newItem"
+                    spellcheck="false" autofocus required>
                 <button type="submit" name="list" value="<%=info%>">+</button>
             </form>
         </div>

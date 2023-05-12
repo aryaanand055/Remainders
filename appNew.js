@@ -18,6 +18,9 @@ app.use(express.static("\public"))
 //Sets the default view engine to ejs templates
 app.set("view engine", "ejs")
 
+//Allows to recieve data from the fetch method
+app.use(express.json());
+
 // For database
 const database = require("./database")
 
@@ -44,16 +47,18 @@ app.route("/")
         })
 
     })
-    .post((req, res) => {
+    .put((req, res) => {
+        console.log(req.body)
         if (req.body.list === "Work") {
-            database.insertOne("todo", req.body.newItem, "workTasks").then(() => {
-                res.redirect("/work")
+            database.insertOne(req.body.title, "workTasks").then(() => {
+                // res.redirect("/work")
             })
         } else {
-            database.insertOne("todo", req.body.newItem, "tasks").then(() => {
-                res.redirect("/")
+            database.insertOne(req.body.title, "tasks").then(() => {
+                // res.redirect("/")
             })
         }
+        res.sendStatus(200)
     })
 
 //Work route
@@ -78,6 +83,11 @@ app.route("/about")
     .get((req, res) => {
         res.render("about")
     })
+
+app.put('/update-item', (req, res) => {
+    database.updateOne("tasks", req.body.title, req.body.done)
+    res.sendStatus(200);
+});
 
 app.listen(portToListen, () => {
     console.log(`Listening on port ${portToListen}`)

@@ -1,55 +1,81 @@
-const {
-    MongoClient
-} = require("mongodb");
+// Connect and configure to MongoDB Atlas
+const mongoose = require("mongoose");
 
-let getAll = async function (listToGet) {
-    let url = "mongodb+srv://phoenix:cookies@todolistheroku.kn4l80i.mongodb.net/?retryWrites=true&w=majority";
-    const client = new MongoClient(url)
-    const db = client.db("data");
-    let list = db.collection(listToGet);
+mongoose.connect(
+    "mongodb+srv://phoenix:cookies@todolistheroku.kn4l80i.mongodb.net/data", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }
+);
+
+const taskSchema = new mongoose.Schema({
+    title: String,
+    done: Boolean,
+});
+
+const Task = mongoose.model("task", taskSchema);
+const WorkTask = mongoose.model("worktask", taskSchema);
+
+// Function to get all tasks from the specified list
+async function getAll(listToGet) {
     try {
-        let tasksArray = await list.find({}).toArray();
-        console.log(123)
-        return {
-            tasksArray
+        if (listToGet === "tasks") {
+            const tasksArray = await Task.find({});
+            return {
+                tasksArray
+            };
+        } else if (listToGet === "workTasks") {
+            const tasksArray = await WorkTask.find({});
+            return {
+                tasksArray
+            };
         }
     } catch (err) {
-        console.log(err.stack)
-    } finally {
-        await client.close()
+        console.log(err.stack);
     }
 }
 
-
-let insertOne = async function (stat, title, listToAdd) {
-    let url = "mongodb+srv://phoenix:cookies@todolistheroku.kn4l80i.mongodb.net/?retryWrites=true&w=majority";
-
-    const client = new MongoClient(url)
-    const db = client.db("data");
-    let list = db.collection(listToAdd);
-
+// Function to insert a new task into the specified list
+async function insertOne(title, listToAdd) {
     try {
-        if (stat === "todo") {
-            await list.insertOne({
-                title,
+        if (listToAdd === "tasks") {
+            await Task.create({
+                title: title,
                 done: false
             });
-        } else if (stat === "done") {
-            await list.insertOne({
-                title,
-                done: true
+        } else if (listToAdd === "workTasks") {
+            await WorkTask.create({
+                title: title,
+                done: false
             });
         }
-        return "Successfully added"
-
+        return "Successfully added";
     } catch (err) {
-        console.log(err.stack)
-    } finally {
-        await client.close()
+        console.log(err.stack);
     }
 }
-
+async function updateOne(list, task, done) {
+    try {
+        if (list === "tasks") {
+            await Task.updateOne({
+                title: task
+            }, {
+                done: done
+            });
+        } else if (list === "workTasks") {
+            await WorkTask.updateOne({
+                title: task
+            }, {
+                done: done
+            });
+        }
+        return "Successfully updated";
+    } catch {
+        console.log(err.stack);
+    }
+}
 module.exports = {
     getAll,
-    insertOne
-}
+    insertOne,
+    updateOne
+};
