@@ -84,11 +84,22 @@ app.route("/about")
         res.render("about")
     })
 
-app.put('/update-item', (req, res) => {
-    database.updateOne("tasks", req.body.title, req.body.done)
-    res.sendStatus(200);
+app.route("/update-item")
+    .put((req, res) => {
+        database.updateOne("tasks", req.body.title, req.body.done)
+        res.sendStatus(200);
+    });
+
+
+app.use((req, res, next) => {
+    res.render("404");
 });
 
+// Handles errors that occurs anywhere
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
 app.listen(portToListen, () => {
     console.log(`Listening on port ${portToListen}`)
 })
