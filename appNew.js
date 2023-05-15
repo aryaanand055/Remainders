@@ -24,41 +24,36 @@ app.use(express.json());
 // For database
 const database = require("./database")
 
-
-// //Custom Module
-// const date = require(__dirname + "/date.js")
-// let day = date.getDay()
-
-
+// Creating the routes
 //Home Route
 app.route("/")
     .get((req, res) => {
         let itemsTitle = []
 
-        database.getAll("home").then(e => {
-            e.tasksArray.forEach(j => {
-                itemsTitle.push(j)
+        database.getAll("home")
+            .then(e => {
+                e.tasksArray.forEach(j => {
+                    itemsTitle.push(j)
+                })
+                res.render("home", {
+                    title: "Arya",
+                    list: "home",
+                    newItem: itemsTitle
+                })
+            }).catch(err => {
+                console.error(err.stack);
+                res.status(500).send("Error occured while retrieving tasks")
             })
-            res.render("home", {
-                title: "Arya",
-                list: "home",
-                newItem: itemsTitle
-            })
-        })
-
     })
     .put((req, res) => {
-        console.log(req.body)
-        if (req.body.list === "work") {
-            database.insertOne(req.body.title, "work").then(() => {
-                // res.redirect("/work")
+        database.insertOne(req.body.title, req.body.list)
+            .then((responseData) => {
+                res.status(200).send(responseData);
             })
-        } else {
-            database.insertOne(req.body.title, "home").then(() => {
-                // res.redirect("/")
-            })
-        }
-        res.sendStatus(200)
+            .catch(err => {
+                console.error(err.stack);
+                res.status(500).send("Error occurred while inserting task");
+            });
     })
 
 //Work route
@@ -84,11 +79,20 @@ app.route("/about")
         res.render("about")
     })
 
-app.route("/update-item")
+app.route("/modify-item")
     .put((req, res) => {
-        console.log(req.body.list, req.body.title, req.body.done)
         database.updateOne(req.body.list, req.body.title, req.body.done)
         res.sendStatus(200);
+    })
+    .delete((req, res) => {
+        database.deleteOne(req.body.title, req.body.list)
+            .then((responseData) => {
+                res.status(200).send(responseData);
+            })
+            .catch(err => {
+                console.error(err.stack);
+                res.status(500).send("Error occurred while inserting task");
+            });
     });
 
 

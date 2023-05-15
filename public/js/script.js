@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    //Checkbox
     // Get all the checkboxes on the page
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
@@ -23,11 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 })
             }
-            fetch('/update-item', requests)
+            fetch('/modify-item', requests)
         });
     });
 
-
+    //Submit and insert tsk
     const taskForm = document.getElementById('taskForm');
 
     taskForm.addEventListener('submit', (event) => {
@@ -49,6 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Clear the form
         document.querySelector("#task_input").value = ""
+
+        //Send a request to server to add to DB
         const list = document.getElementById("heading-info").textContent
         const request = {
             method: 'put',
@@ -61,7 +64,66 @@ document.addEventListener("DOMContentLoaded", function () {
             })
         };
 
-        fetch("/", request) // Make the asynchronous request to the server
+        fetch("/", request).then(data => {
+            data.json().then(response => {
+                console.log(response)
+            })
+        })
 
     });
+
+    // Right click menu
+
+    document.onclick = hideMenu;
+    document.oncontextmenu = rightClick;
+
+    function hideMenu() {
+        contextMenu.style.display = "none";
+    }
+
+    function rightClick(e) {
+        e.preventDefault();
+
+        if (document.getElementById("contextMenu").style.display == "block")
+            hideMenu();
+        else {
+            if (e.target.classList.contains("item") | e.target.classList.contains("list-item")) {
+                var menu = document.getElementById("contextMenu")
+                menu.style.display = 'block';
+                menu.style.left = e.pageX + "px";
+                menu.style.top = e.pageY + "px";
+                contextMenu.addEventListener("click", function (event) {
+                    if (event.target.id === "delete") {
+                        deleteClassItem(e.target.parentNode);
+                        contextMenu.style.display = "none";
+                    }
+                });
+            }
+        }
+    }
+
+    function deleteClassItem(item) {
+        const title = item.querySelector('.list-item').textContent.trim();
+        const list = document.getElementById('heading-info').textContent.trim();
+
+        const request = {
+            method: 'delete',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: title,
+                list: list
+            })
+        };
+
+        fetch('/modify-item', request).then(data => {
+            data.json().then(response => {
+                console.log(response)
+            })
+        })
+        item.remove();
+    }
+
+
 });

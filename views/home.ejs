@@ -14,7 +14,7 @@
             <div class="item">
                 <input type="checkbox">
                 <% }%>
-                <p class="list-item w-75"><%=item.title%></p>
+                <p class="list-item w-75 <%=list%>_item"><%=item.title%></p>
             </div>
             <%})%>
             <form id="taskForm" autocomplete="off" action="/" method="post" class="item">
@@ -23,6 +23,12 @@
                 <button type="submit" name="list" value="<%=list%>">+</button>
             </form>
         </div>
+        <div class="context-menu" id="contextMenu">
+            <ul>
+                <li><a href="#" id="delete">Delete</a></li>
+            </ul>
+        </div>
+
         <script src="/js/script.js"></script>
 
 </body>
