@@ -1,1 +1,6 @@
-A to-do list app using backend... Uses mongodb cloud for storage... Uses express and node.js
+To-Do List App
+
+To use clone the poject...
+
+right click a task to delete.
+double click to edit the task
