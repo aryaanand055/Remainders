@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
             }
             fetch('/modify-item', requests)
+                .then(data => data.json())
+                .then(response => {
+                    console.log(response);
+                });
         });
     });
 
@@ -126,4 +130,52 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+
+
+
+    document.addEventListener("dblclick", (e) => {
+        if (e.target.classList.contains("list-item")) {
+            const currentText = event.target.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentText;
+            input.classList = 'list-item-edit';
+
+            input.addEventListener('blur', () => {
+                const newText = input.value.trim();
+                if (newText !== '') {
+                    e.target.textContent = newText;
+                    updateTaskInDatabase(e.target.parentNode, currentText);
+                    input.remove()
+                }
+            });
+
+            e.target.textContent = '';
+            e.target.appendChild(input);
+            input.focus();
+        }
+    })
+
+    function updateTaskInDatabase(item, newItemName) {
+        const title = item.querySelector('.list-item').textContent.trim();
+        const list = document.getElementById('heading-info').textContent.trim();
+        const request = {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: title,
+                list: list,
+                newTitle: newItemName
+            }),
+        };
+
+        fetch('/replace-item', request)
+            .then(data => data.json())
+            .then(response => {
+                console.log(response);
+            });
+
+    }
 });

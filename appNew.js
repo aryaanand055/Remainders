@@ -82,7 +82,12 @@ app.route("/about")
 app.route("/modify-item")
     .put((req, res) => {
         database.updateOne(req.body.list, req.body.title, req.body.done)
-        res.sendStatus(200);
+            .then((responseData) => {
+                res.status(200).send(responseData)
+            }).catch(err => {
+                console.error(err.stack);
+                res.status(500).send("Error occurred while updating task");
+            });
     })
     .delete((req, res) => {
         database.deleteOne(req.body.title, req.body.list)
@@ -95,6 +100,17 @@ app.route("/modify-item")
             });
     });
 
+app.route("/replace-item")
+    .put((req, res) => {
+        database.replaceOne(req.body.list, req.body.title, req.body.newTitle)
+            .then((responseData) => {
+                res.status(200).send(responseData);
+            })
+            .catch(err => {
+                console.error(err.stack);
+                res.status(500).send("Error occurred while replacing task");
+            });
+    })
 
 app.use((req, res, next) => {
     res.render("404");

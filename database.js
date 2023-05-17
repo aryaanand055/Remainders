@@ -61,11 +61,33 @@ async function updateOne(list, title, done) {
         }, {
             done
         });
-        return "Successfully updated";
+        return {
+            msg: "Successfully updated"
+        };
     } catch (err) {
         console.error(err.stack);
         return {
             error: "Could not update task"
+        };
+    }
+}
+async function replaceOne(list, newTitle, title) {
+    try {
+        await Task.updateOne({
+            title: title,
+            list: list
+        }, {
+            $set: {
+                title: newTitle
+            }
+        });
+        return {
+            msg: "Successfully replaced"
+        };
+    } catch (err) {
+        console.error(err.stack);
+        return {
+            error: "Could not replace task"
         };
     }
 }
@@ -96,5 +118,6 @@ module.exports = {
     getAll,
     insertOne,
     updateOne,
-    deleteOne
+    deleteOne,
+    replaceOne
 };
