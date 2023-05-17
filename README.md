@@ -19,3 +19,9 @@ $ node appNew.js
 ```
 
 Navigate to [`http://localhost:3000`](http://localhost:3000).
+
+## Features
+- Add tasks
+- Delete tasks using right click
+- Edit tasks by dblclick
+- Has a seperate work lists which can be accessed by adding /work to the end of the url

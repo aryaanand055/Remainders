@@ -36,7 +36,7 @@ app.route("/")
                     itemsTitle.push(j)
                 })
                 res.render("home", {
-                    title: "Arya",
+                    title: "Stephen",
                     list: "home",
                     newItem: itemsTitle
                 })
