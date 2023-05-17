@@ -1,6 +1,21 @@
-To-Do List App
+# To-Do list app
 
-To use clone the poject...
+This app uses express and node.js along with mongodb apart from html,css, js and ejs
 
-right click a task to delete.
-double click to edit the task
+## Quick Start
+
+To run this app, clone the repository and install dependencies:
+
+```bash
+$ git clone https://github.com/aryaanand055/Remainders.git
+$ cd Remainders
+$ npm install
+```
+
+Then start the server.
+
+```bash
+$ node appNew.js
+```
+
+Navigate to [`http://localhost:3000`](http://localhost:3000).
