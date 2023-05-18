@@ -4,7 +4,7 @@ const {
 const mongoose = require("mongoose");
 require('dotenv').config();
 
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -60,7 +60,7 @@ async function updateOne(list, title, done) {
             list
         }, {
             done
-        });
+        })
         return {
             msg: "Successfully updated"
         };

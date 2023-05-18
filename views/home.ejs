@@ -1,36 +1,53 @@
 <%- include("partials/header")%>
 
 <body>
-    <div class="box" id="heading">
-        <h2 id="heading-todo">Hi there <%=title%>!</h2>
-        <h4 id="heading-info"><%=list%></h4>
-    </div>
-    <div id="lists" class="box">
-        <%newItem.forEach(item=>{%>
-        <% if(item.done === true){ %>
-        <div class="item done">
-            <input type="checkbox" checked>
-            <% } else {%>
-            <div class="item">
-                <input type="checkbox">
-                <% }%>
-                <p class="list-item w-75 <%=list%>_item"><%=item.title%></p>
+    <div class="container">
+        <div class="box" id="heading">
+            <h2 id="heading-todo">Hi there <%=title%>!</h2>
+            <h4 id="heading-info"><%=list%></h4>
+        </div>
+        <div id="lists" class="box">
+            <%newItem.forEach(item=>{%>
+            <% if(item.done === true){ %>
+            <div class="item done">
+                <label class="label">
+                    <input class="label__checkbox" type="checkbox" checked />
+                    <span class="label__text">
+                        <span class="label__check">
+                            <i class="fa fa-check icon"></i>
+                        </span>
+                    </span>
+                </label>
+                <% } else {%>
+                <div class="item">
+                    <!-- <div class="center"> -->
+                    <label class="label">
+                        <input class="label__checkbox" type="checkbox" />
+                        <span class="label__text">
+                            <span class="label__check">
+                                <i class="fa fa-check icon"></i>
+                            </span>
+                        </span>
+                    </label>
+                    <!-- </div> -->
+                    <% }%>
+                    <p class="list-item <%=list%>_item"><%=item.title%></p>
+                </div>
+                <%})%>
+                <form id="taskForm" autocomplete="off" action="/" method="post" class="item">
+                    <input type="text" id="task_input" class="form-control" placeholder="Input Here" name="newItem"
+                        spellcheck="false" autofocus required>
+                    <button type="submit" name="list" value="<%=list%>">+</button>
+                </form>
             </div>
-            <%})%>
-            <form id="taskForm" autocomplete="off" action="/" method="post" class="item">
-                <input type="text" id="task_input" class="form-control" placeholder="Input Here" name="newItem"
-                    spellcheck="false" autofocus required>
-                <button type="submit" name="list" value="<%=list%>">+</button>
-            </form>
-        </div>
-        <div class="context-menu" id="contextMenu">
-            <ul>
-                <li><a href="#" id="delete">Delete</a></li>
-            </ul>
-        </div>
+            <div class="context-menu" id="contextMenu">
+                <ul>
+                    <li><a href="#" id="delete">Delete</a></li>
+                </ul>
+            </div>
 
-        <script src="/js/script.js"></script>
-
+            <script src="/js/script.js"></script>
+        </div>
 </body>
 
 <%- include("partials/footer")%>

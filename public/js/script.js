@@ -8,9 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', event => {
             // Get the title of the item associated with the checkbox
-            const title = event.target.nextElementSibling.textContent.trim();
+            const title = event.target.parentNode.nextElementSibling.textContent.trim();
             const done = event.target.checked;
             const list = document.getElementById("heading-info").textContent
+
+            event.target.parentNode.parentNode.classList.toggle("done")
+
             // Make an HTTP request to update the database
             let requests = {
                 method: 'put',
@@ -135,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener("dblclick", (e) => {
         if (e.target.classList.contains("list-item")) {
-            const currentText = event.target.textContent;
+            const currentText = e.target.textContent;
             const input = document.createElement('input');
             input.type = 'text';
             input.value = currentText;
@@ -145,13 +148,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 const newText = input.value.trim();
                 if (newText !== '') {
                     e.target.textContent = newText;
+                    e.target.style.display = "block"
+
                     updateTaskInDatabase(e.target.parentNode, currentText);
                     input.remove()
                 }
             });
 
             e.target.textContent = '';
-            e.target.appendChild(input);
+            e.target.style.display = "none"
+            e.target.parentNode.appendChild(input);
             input.focus();
         }
     })
