@@ -39,19 +39,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const taskForm = document.getElementById('taskForm');
 
     taskForm.addEventListener('submit', (event) => {
-        event.preventDefault(); // Prevent the default form submission behavior
+        event.preventDefault();
 
         let val = document.querySelector("#task_input").value
-
         let newTask = document.createElement("div")
         newTask.classList = "item"
-        let checkbox = document.createElement("input")
-        checkbox.type = "checkbox"
-        checkbox.checked = false
+        let label = document.createElement("label")
+        let input = document.createElement("input")
+        input.type = "checkbox"
+        input.classList = "label__checkbox"
+        input.checked = false
+        let span = document.createElement("span")
+        span.classList = "label__text"
+        let span_check = document.createElement("span")
+        span_check.classList = "label__check"
+        let icon = document.createElement("i")
+        icon.classList = "fa fa-check icon"
+        span_check.appendChild(icon)
+        span.appendChild(span_check)
+        label.appendChild(input)
+        label.appendChild(span)
+        newTask.appendChild(label)
         let p = document.createElement("p")
         p.classList = "list-item w-75"
         p.textContent = val
-        newTask.appendChild(checkbox)
         newTask.appendChild(p)
         document.querySelector("#lists").insertBefore(newTask, document.querySelector(".item:last-child"))
 
@@ -148,10 +159,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 const newText = input.value.trim();
                 if (newText !== '') {
                     e.target.textContent = newText;
-                    e.target.style.display = "block"
-
                     updateTaskInDatabase(e.target.parentNode, currentText);
-                    input.remove()
+                } else {
+                    e.target.textContent = currentText;
+                }
+                e.target.style.display = "block"
+                input.remove()
+            });
+            input.addEventListener('keypress', (e) => {
+                if (e.key === "Enter") {
+                    e.target.blur();
                 }
             });
 

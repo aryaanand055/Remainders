@@ -4,8 +4,13 @@ const portToListen = 5050
 const express = require("express")
 const app = express()
 
+// For database
+const database = require("./database")
+
 //Importing and using bodyparser(for getting data from the webpage)
 const bodyparser = require("body-parser")
+
+
 
 //Allows for the use of the body parser
 app.use(bodyparser.urlencoded({
@@ -21,8 +26,6 @@ app.set("view engine", "ejs")
 //Allows to recieve data from the fetch method
 app.use(express.json());
 
-// For database
-const database = require("./database")
 
 // Creating the routes
 //Home Route
@@ -113,10 +116,120 @@ app.route("/replace-item")
     })
 
 
+
+
+// Import necessary modules:
+const User = require("./user").User;
+// const passportLocalMongoose = require("passport-local-mongoose")
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+
+// Configure Passport to use the LocalStrategy for authentication:
+passport.use(new LocalStrategy(User.authenticate()));
+
+// Configure Passport serialization and deserialization of user information:
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// Set up the express - session middleware for session management:
+app.use(require("express-session")({
+    secret: "Rusty is a dog",
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Initialize Passport and add it as middleware to the application:
+app.use(passport.initialize());
+
+// Enable Passport to use session - based authentication:
+app.use(passport.session());
+
+const userDb = require("./user")
+
+
+
+
+
+
+
 app.route("/login")
     .get((req, res) => {
         res.render("login")
     })
+    .post((req, res) => {
+        const {
+            email,
+            password
+        } = req.body;
+        try {
+            let user;
+            userDb.findUser(email).then(data => {
+                user = data
+                if (user) {
+                    //check if password matches
+                    const result = password === user.password;
+                    if (result === true) {
+                        // res.render("home");
+                        res.send("Password match. User authenticated")
+                    } else {
+                        res.status(400).json({
+                            error: "password doesn't match"
+                        });
+                    }
+                } else {
+                    res.status(400).json({
+                        error: "User doesn't exist"
+                    });
+                }
+            });
+        } catch (error) {
+            res.status(400).json({
+                error
+            });
+        }
+    })
+
+app.route("/signup")
+    .get((req, res) => {
+        res.render("signup")
+    })
+    .post((req, res) => {
+        const {
+            fName,
+            lName,
+            userEmail,
+            userPassword
+        } = req.body;
+        try {
+            console.log(req.body)
+            userDb.addUser(fName, lName, userEmail, userPassword).then(data => {
+                res.send(data)
+            })
+
+        } catch (error) {
+            res.status(400).json({
+                error
+            });
+        }
+
+    })
+
+
+
+app.route("/logout").get((req, res) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err); // Remove this line
+        }
+        res.redirect('/');
+    });
+});
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect("/login");
+}
+
 
 app.use((req, res, next) => {
     res.render("404");

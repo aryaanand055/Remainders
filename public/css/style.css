@@ -7,6 +7,7 @@
     --secondary-color: #e9fdf5;
     --checkbox: #83e3b55e;
     --checkbox-hover: #83e3b5;
+    --bg-light: #edeecb;
 }
 
 html {
@@ -67,12 +68,12 @@ p {
     color: #00204a;
 }
 
-form {
+#taskForm {
     text-align: center;
     margin-left: 20px;
 }
 
-button {
+#taskForm button {
     min-height: 50px;
     width: 50px;
     border-radius: 50%;
@@ -274,4 +275,45 @@ i.icon {
         opacity: 1;
         transform: scale(1)
     }
+}
+
+.form-container {
+    background-color: var(--bg-light);
+    border-radius: 20px;
+}
+
+.user-form {
+    margin: 1rem 0;
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+
+
+.user-form button {
+    margin-top: 1rem;
+}
+
+.user-form input {
+    width: 75%;
+    background: #f3f9f7;
+    top: 10px;
+    border: none;
+    font-size: 20px;
+    font-weight: 200;
+    outline: none;
+    margin: 10px auto;
+}
+
+.user-form * {
+    margin: 10px;
+}
+
+.user-form input:focus {
+    outline: none;
+    box-shadow: inset 0 -3px 0 0 var(--main-color);
+}
+
+#task_input {
+    text-align: center;
 }

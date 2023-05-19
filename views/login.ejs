@@ -1,3 +1,18 @@
 <%- include("partials/header")%>
-<h1>This is the login page</h1>
+<!-- Login page -->
+
+<body>
+    <div class="container form-container">
+        <form id="login-form" class="user-form" action="/login" method="post">
+            <h1>Login</h1>
+            <div class="form-group">
+                <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
+                    placeholder="Enter email" name="email">
+                <input type="password" class="form-control" id="userPassword" placeholder="Enter Password"
+                    name="password">
+            </div>
+            <button type="submit" class="btn btn-primary m3">Submit</button>
+        </form>
+    </div>
+</body>
 <%- include("partials/footer")%>
