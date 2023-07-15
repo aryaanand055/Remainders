@@ -1,18 +1,16 @@
 <%- include("partials/header")%>
 <!-- Login page -->
 
-<body>
-    <div class="container form-container">
-        <form id="login-form" class="user-form" action="/login" method="post">
-            <h1>Login</h1>
-            <div class="form-group">
-                <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
-                    placeholder="Enter email" name="email">
-                <input type="password" class="form-control" id="userPassword" placeholder="Enter Password"
-                    name="password">
-            </div>
-            <button type="submit" class="btn btn-primary m3">Submit</button>
-        </form>
-    </div>
-</body>
+<div class="container form-container">
+    <form id="login-form" class="user-form" action="/login" method="post">
+        <h1>Login</h1>
+        <div class="form-group">
+            <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
+                placeholder="Enter email" name="email">
+            <input type="password" class="form-control" id="userPassword" placeholder="Enter Password" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary m3">Submit</button>
+        <a href="/signup" class="btn btn-primary m-3">Sign Up</a> <!-- Added Sign Up button -->
+    </form>
+</div>
 <%- include("partials/footer")%>

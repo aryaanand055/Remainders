@@ -1,23 +1,21 @@
 <%- include("partials/header")%>
 <!-- Login page -->
 
-<body>
-    <div class="container form-container">
-        <form id="signup-form" class="user-form" action="/signup" method="post">
-            <h1>Signup</h1>
-            <div class="form-group">
-                <input type="text" class="form-control" name="fName" id="fName" placeholder="First Name">
-                <input type="text" class="form-control" name="lName" id="lName" placeholder="Last Name">
-                <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
-                    placeholder="Enter email" name="userEmail">
+<div class="container form-container">
+    <form id="signup-form" class="user-form" action="/signup" method="post">
+        <h1>Signup</h1>
+        <div class="form-group">
+            <input type="text" class="form-control" name="fName" id="fName" placeholder="First Name">
+            <input type="text" class="form-control" name="lName" id="lName" placeholder="Last Name">
+            <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
+                placeholder="Enter email" name="userEmail">
 
-                <input type="password" class="form-control" id="userPassword" placeholder="Enter Password"
-                    name="userPassword">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your details with anyone
-                    else.</small>
-                <br>
-                <button type="submit" class="btn btn-primary m3">Looks good</button>
-        </form>
-    </div>
-</body>
+            <input type="password" class="form-control" id="userPassword" placeholder="Enter Password"
+                name="userPassword">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your details with anyone
+                else.</small>
+            <br>
+            <button type="submit" class="btn btn-primary m3">Looks good</button>
+    </form>
+</div>
 <%- include("partials/footer")%>

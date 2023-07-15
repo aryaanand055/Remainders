@@ -10,7 +10,13 @@ const database = require("./database")
 //Importing and using bodyparser(for getting data from the webpage)
 const bodyparser = require("body-parser")
 
-
+//Login Data
+let loginData = {
+    loggedIn: false,
+    username: "",
+    fName: "",
+    lName: ""
+}
 
 //Allows for the use of the body parser
 app.use(bodyparser.urlencoded({
@@ -31,22 +37,25 @@ app.use(express.json());
 //Home Route
 app.route("/")
     .get((req, res) => {
-        let itemsTitle = []
-
-        database.getAll("home")
-            .then(e => {
-                e.tasksArray.forEach(j => {
-                    itemsTitle.push(j)
+        if (loginData.loggedIn === true) {
+            let itemsTitle = []
+            database.getAll("home")
+                .then(e => {
+                    e.tasksArray.forEach(j => {
+                        itemsTitle.push(j)
+                    })
+                    res.render("home", {
+                        title: loginData.fName,
+                        list: "home",
+                        newItem: itemsTitle
+                    })
+                }).catch(err => {
+                    console.error(err.stack);
+                    res.status(500).send("Error occured while retrieving tasks")
                 })
-                res.render("home", {
-                    title: "Stephen",
-                    list: "home",
-                    newItem: itemsTitle
-                })
-            }).catch(err => {
-                console.error(err.stack);
-                res.status(500).send("Error occured while retrieving tasks")
-            })
+        } else {
+            res.redirect('/login')
+        }
     })
     .put((req, res) => {
         database.insertOne(req.body.title, req.body.list)
@@ -119,42 +128,18 @@ app.route("/replace-item")
 
 
 // Import necessary modules:
-const User = require("./user").User;
-// const passportLocalMongoose = require("passport-local-mongoose")
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-
-// Configure Passport to use the LocalStrategy for authentication:
-passport.use(new LocalStrategy(User.authenticate()));
-
-// Configure Passport serialization and deserialization of user information:
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
-// Set up the express - session middleware for session management:
-app.use(require("express-session")({
-    secret: "Rusty is a dog",
-    resave: false,
-    saveUninitialized: false
-}));
-
-// Initialize Passport and add it as middleware to the application:
-app.use(passport.initialize());
-
-// Enable Passport to use session - based authentication:
-app.use(passport.session());
 
 const userDb = require("./user")
 
 
 
-
-
-
-
 app.route("/login")
     .get((req, res) => {
-        res.render("login")
+        if (loginData.loggedIn === true) {
+            res.redirect("/")
+        } else {
+            res.render("login")
+        }
     })
     .post((req, res) => {
         const {
@@ -169,8 +154,12 @@ app.route("/login")
                     //check if password matches
                     const result = password === user.password;
                     if (result === true) {
-                        // res.render("home");
-                        res.send("Password match. User authenticated")
+                        // res.render("home")
+                        loginData.loggedIn = true
+                        loginData.username = user.email
+                        loginData.fName = user.fName
+                        loginData.lName = user.lName
+                        res.redirect("/")
                     } else {
                         res.status(400).json({
                             error: "password doesn't match"
@@ -203,7 +192,12 @@ app.route("/signup")
         try {
             console.log(req.body)
             userDb.addUser(fName, lName, userEmail, userPassword).then(data => {
-                res.send(data)
+                res.redirect("/login")
+            }).catch(err => {
+                console.log(err)
+                res.status(400).json({
+                    error: "User already exists"
+                })
             })
 
         } catch (error) {
@@ -216,19 +210,8 @@ app.route("/signup")
 
 
 
-app.route("/logout").get((req, res) => {
-    req.logout(function (err) {
-        if (err) {
-            return next(err); // Remove this line
-        }
-        res.redirect('/');
-    });
-});
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) return next();
-    res.redirect("/login");
-}
+
 
 
 app.use((req, res, next) => {
@@ -240,6 +223,8 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something went wrong!');
 });
+
+
 app.listen(portToListen, () => {
     console.log(`Listening on port ${portToListen}`)
 })

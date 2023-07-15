@@ -145,8 +145,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-
     document.addEventListener("dblclick", (e) => {
         if (e.target.classList.contains("list-item")) {
             const currentText = e.target.textContent;
@@ -201,4 +199,38 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
     }
+
+    // For the navbar
+
+
+    // Import the HTML2Canvas library
+    const titleElement = document.querySelector(".header .title");
+
+    function updateTitleColor() {
+        // Convert the gradient background to an image
+        html2canvas(document.documentElement).then(canvas => {
+            const context = canvas.getContext("2d");
+
+            // Get the pixel color at the position of the title
+            const rect = titleElement.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = (rect.top + rect.height / 2) + 5;
+            const pixel = context.getImageData(x, y, 1, 1).data;
+            const backgroundColor = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+            const isMainColor = backgroundColor ===
+                "rgb(237, 238, 203)"; // Change this to match your --main-color RGB value
+            if (isMainColor) {
+                titleElement.style.color = "var(--secondary-color)";
+            } else {
+                titleElement.style.color = "var(--main-color)";
+            }
+        });
+    }
+
+    // Update the title color on initial load and after the page has loaded
+    updateTitleColor()
+    // Update the title color on every scroll
+    window.addEventListener("scroll", updateTitleColor);
+
+
 });

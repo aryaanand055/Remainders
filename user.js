@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 //Used to load .env variables
 require('dotenv').config();
 
-const passportLocalMongoose = require("passport-local-mongoose");
 
 mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
@@ -21,11 +20,10 @@ const userSchema = new mongoose.Schema({
     fName: String,
     lName: String,
     email: String,
-    password: String
-    // tasks: [taskSchema]
+    password: String,
+    tasks: [taskSchema]
 });
 
-userSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model("users", userSchema);
 
@@ -64,6 +62,5 @@ async function findUser(userName) {
 
 module.exports = {
     addUser,
-    findUser,
-    User
+    findUser
 };

@@ -1,5 +1,5 @@
 * {
-    transition-duration: 500ms;
+    transition-duration: 250ms;
 }
 
 :root {
@@ -316,4 +316,54 @@ i.icon {
 
 #task_input {
     text-align: center;
+}
+
+/* Navbar */
+
+.header {
+    width: 100%;
+    text-align: right;
+    position: fixed;
+    /* color: var(--navbar-bg-color); */
+    top: 0;
+
+}
+
+.header .logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 32px;
+    font-weight: 500;
+    padding: 26px;
+}
+
+.header .link {
+    display: inline-block;
+    padding: 15px 0;
+    margin: 10px 20px;
+    position: relative;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: var(--main-color);
+    font-weight: 200;
+    font-size: 24px;
+
+    .bar {
+        width: 100%;
+        display: inline-block;
+        border-bottom: 3px solid;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        transition: all 300ms;
+    }
+
+    &:hover {
+        .bar {
+            opacity: 1;
+            bottom: 10px;
+        }
+    }
 }
