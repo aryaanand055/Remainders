@@ -5,7 +5,7 @@ const express = require("express")
 const app = express()
 
 // For database
-const database = require("./database")
+const database = require("./user")
 
 //Importing and using bodyparser(for getting data from the webpage)
 const bodyparser = require("body-parser")
@@ -13,9 +13,10 @@ const bodyparser = require("body-parser")
 //Login Data
 let loginData = {
     loggedIn: false,
-    username: "",
+    email: "",
     fName: "",
-    lName: ""
+    lName: "",
+
 }
 
 //Allows for the use of the body parser
@@ -39,11 +40,14 @@ app.route("/")
     .get((req, res) => {
         if (loginData.loggedIn === true) {
             let itemsTitle = []
-            database.getAll("home")
+            database.getAll(loginData.email)
                 .then(e => {
                     e.tasksArray.forEach(j => {
-                        itemsTitle.push(j)
+                        if (j.list === "home") {
+                            itemsTitle.push(j)
+                        }
                     })
+                    console.log(itemsTitle)
                     res.render("home", {
                         title: loginData.fName,
                         list: "home",
@@ -51,14 +55,23 @@ app.route("/")
                     })
                 }).catch(err => {
                     console.error(err.stack);
-                    res.status(500).send("Error occured while retrieving tasks")
+                    res.render("error", {
+                        msg: "Error Occured while retrieving tasks",
+                        link1: "logout"
+                    })
+                    // res.status(500).send("Error occured while retrieving tasks")
                 })
         } else {
             res.redirect('/login')
         }
     })
     .put((req, res) => {
-        database.insertOne(req.body.title, req.body.list)
+        listDetails = {
+            title: req.body.title,
+            done: false,
+            list: req.body.list
+        }
+        database.insertOne(loginData.email, listDetails)
             .then((responseData) => {
                 res.status(200).send(responseData);
             })
@@ -69,23 +82,31 @@ app.route("/")
     })
 
 //Work route
+
 app.route("/work")
     .get((req, res) => {
-        let items = []
-
-        database.getAll("work").then(e => {
-            e.tasksArray.forEach(j => {
-                items.push(j)
-            })
-
-            res.render("home", {
-                title: "Arya",
-                list: "work",
-                newItem: items
-            })
-        })
+        if (loginData.loggedIn === true) {
+            let itemsTitle = []
+            database.getAll(loginData.email)
+                .then(e => {
+                    e.tasksArray.forEach(j => {
+                        if (j.list === "work") {
+                            itemsTitle.push(j)
+                        }
+                    })
+                    res.render("home", {
+                        title: loginData.fName,
+                        list: "work",
+                        newItem: itemsTitle
+                    })
+                }).catch(err => {
+                    console.error(err.stack);
+                    res.status(500).send("Error occured while retrieving tasks")
+                })
+        } else {
+            res.redirect('/login')
+        }
     })
-
 app.route("/about")
     .get((req, res) => {
         res.render("about")
@@ -102,13 +123,14 @@ app.route("/modify-item")
             });
     })
     .delete((req, res) => {
-        database.deleteOne(req.body.title, req.body.list)
+        console.log(req.body.id)
+        database.deleteOne(loginData.email, req.body.id)
             .then((responseData) => {
                 res.status(200).send(responseData);
             })
             .catch(err => {
                 console.error(err.stack);
-                res.status(500).send("Error occurred while inserting task");
+                res.status(500).send("Error occurred while deleting task");
             });
     });
 
@@ -124,7 +146,12 @@ app.route("/replace-item")
             });
     })
 
-
+app.route("/logout")
+    .get((req, res) => {
+        // Clear session data and redirect to login page
+        loginData.loggedIn = false
+        res.redirect("/")
+    })
 
 
 // Import necessary modules:
@@ -156,7 +183,7 @@ app.route("/login")
                     if (result === true) {
                         // res.render("home")
                         loginData.loggedIn = true
-                        loginData.username = user.email
+                        loginData.email = user.email
                         loginData.fName = user.fName
                         loginData.lName = user.lName
                         res.redirect("/")
@@ -166,9 +193,11 @@ app.route("/login")
                         });
                     }
                 } else {
-                    res.status(400).json({
-                        error: "User doesn't exist"
-                    });
+                    res.render("error", {
+                        msg: "User doesn't exist",
+                        link1: "signup"
+                    })
+
                 }
             });
         } catch (error) {

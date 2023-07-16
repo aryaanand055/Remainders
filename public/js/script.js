@@ -63,13 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let p = document.createElement("p")
         p.classList = "list-item w-75"
         p.textContent = val
-        newTask.appendChild(p)
-        document.querySelector("#lists").insertBefore(newTask, document.querySelector(".item:last-child"))
 
-        // Clear the form
-        document.querySelector("#task_input").value = ""
-
-        //Send a request to server to add to DB
         const list = document.getElementById("heading-info").textContent
         const request = {
             method: 'put',
@@ -81,10 +75,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 list: list
             })
         };
-
+        id = ""
         fetch("/", request).then(data => {
             data.json().then(response => {
-                console.log(response)
+                p.id = response.id
+                newTask.appendChild(p)
+                document.querySelector("#lists").insertBefore(newTask, document.querySelector(".item:last-child"))
+                document.querySelector("#task_input").value = ""
             })
         })
 
@@ -99,49 +96,54 @@ document.addEventListener("DOMContentLoaded", function () {
         contextMenu.style.display = "none";
     }
 
+    contextMenu.addEventListener("click", abcd)
+    let delItem = ""
+
     function rightClick(e) {
         e.preventDefault();
-
-        if (document.getElementById("contextMenu").style.display == "block")
+        if (document.getElementById("contextMenu").style.display == "block") {
             hideMenu();
-        else {
+        } else {
             if (e.target.classList.contains("item") | e.target.classList.contains("list-item")) {
                 var menu = document.getElementById("contextMenu")
                 menu.style.display = 'block';
                 menu.style.left = e.pageX + "px";
                 menu.style.top = e.pageY + "px";
-                contextMenu.addEventListener("click", function (event) {
-                    if (event.target.id === "delete") {
-                        deleteClassItem(e.target.parentNode);
-                        contextMenu.style.display = "none";
-                    }
-                });
+                delItem = e.target.parentNode
             }
         }
     }
 
-    function deleteClassItem(item) {
-        const title = item.querySelector('.list-item').textContent.trim();
-        const list = document.getElementById('heading-info').textContent.trim();
+    function abcd(event) {
+        if (event.target.id === "delete") {
+            deleteClassItem(delItem);
+            contextMenu.style.display = "none";
+        }
+    }
 
+    function deleteClassItem(item) {
+        const id = item.querySelector(".list-item").id
         const request = {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                title: title,
-                list: list
+                id: id
             })
         };
 
         fetch('/modify-item', request).then(data => {
             data.json().then(response => {
                 console.log(response)
+                if (response.success) {
+                    item.remove();
+                }
             })
         })
-        item.remove();
+
     }
+
 
 
 

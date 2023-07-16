@@ -7,7 +7,7 @@
     --secondary-color: #e9fdf5;
     --checkbox: #83e3b55e;
     --checkbox-hover: #83e3b5;
-    --bg-light: #edeecb;
+    --bg-light: #61c5a0;
 }
 
 html {
@@ -280,11 +280,15 @@ i.icon {
 .form-container {
     background-color: var(--bg-light);
     border-radius: 20px;
+    width: 50%;
+    margin-top: 8rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+        rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 
 .user-form {
     margin: 1rem 0;
-    padding: 1rem 2rem;
+    padding: 3rem 2rem;
     text-align: center;
 }
 
@@ -306,7 +310,7 @@ i.icon {
 }
 
 .user-form * {
-    margin: 10px;
+    margin: 1rem;
 }
 
 .user-form input:focus {
@@ -366,4 +370,17 @@ i.icon {
             bottom: 10px;
         }
     }
+}
+
+/* Footer shadow */
+footer .text {
+    background-color: white;
+    color: var(--main-color);
+    /* font-weight: bold; */
+    margin: 0 auto;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
 }
