@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 //Used to load .env variables
 require('dotenv').config();
 
-
-mongoose.connect(process.env.MONGODB_URL, {
+console.log(process.env)
+mongoose.connect("mongodb+srv://phoenix:cookies@todolistheroku.kn4l80i.mongodb.net/data", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     }).then(() => {
