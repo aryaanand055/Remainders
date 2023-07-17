@@ -1,4 +1,4 @@
-const portToListen = 5050
+const portToListen = 5050 || process.env.PORT
 
 // Importing and using express
 const express = require("express")
