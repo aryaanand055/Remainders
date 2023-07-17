@@ -5,9 +5,14 @@ require('dotenv').config();
 
 
 mongoose.connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }).then(() => {
+        console.log('Connected to MongoDB successfully!');
+    })
+    .catch((error) => {
+        console.error('MongoDB connection error:', error.message);
+    });
 
 const taskSchema = new mongoose.Schema({
     title: String,
