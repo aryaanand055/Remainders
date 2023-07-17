@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 
 console.log(process.env)
-mongoose.connect("mongodb+srv://phoenix:cookies@todolistheroku.kn4l80i.mongodb.net/data", {
+mongoose.connect(process.env.MONGODB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     }).then(() => {
