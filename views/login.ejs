@@ -6,11 +6,12 @@
         <h1>Login</h1>
         <div class="form-group">
             <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
-                placeholder="Enter email" name="email">
-            <input type="password" class="form-control" id="userPassword" placeholder="Enter Password" name="password">
+                placeholder="Enter email" name="email" required>
+            <input type="password" class="form-control" id="userPassword" placeholder="Enter Password" name="password"
+                required>
         </div>
-        <button type="submit" class="btn btn-primary m3">Submit</button>
-        <a href="/signup" class="btn btn-primary m-3">Sign Up Instead</a>
+        <button type="submit" class="btn btn_form m3">Submit</button>
+        <a href="/signup" class="btn btn_form m-3">Sign Up Instead</a>
     </form>
 </div>
 <%- include("partials/footer")%>
