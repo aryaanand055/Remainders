@@ -33,6 +33,9 @@ app.set("view engine", "ejs")
 //Allows to recieve data from the fetch method
 app.use(express.json());
 
+// Import necessary modules:
+
+const userDb = require("./user")
 
 // Creating the routes
 //Home Route
@@ -81,8 +84,6 @@ app.route("/")
             });
     })
 
-//Work route
-
 app.route("/work")
     .get((req, res) => {
         if (loginData.loggedIn === true) {
@@ -114,7 +115,7 @@ app.route("/about")
 
 app.route("/modify-item")
     .put((req, res) => {
-        database.updateOne(req.body.list, req.body.title, req.body.done)
+        database.updateOne(loginData.email, req.body.id, req.body.done)
             .then((responseData) => {
                 res.status(200).send(responseData)
             }).catch(err => {
@@ -136,7 +137,7 @@ app.route("/modify-item")
 
 app.route("/replace-item")
     .put((req, res) => {
-        database.replaceOne(req.body.list, req.body.title, req.body.newTitle)
+        database.replaceOne(loginData.email, req.body.id, req.body.newTitle)
             .then((responseData) => {
                 res.status(200).send(responseData);
             })
@@ -154,9 +155,6 @@ app.route("/logout")
     })
 
 
-// Import necessary modules:
-
-const userDb = require("./user")
 
 
 
@@ -188,9 +186,10 @@ app.route("/login")
                         loginData.lName = user.lName
                         res.redirect("/")
                     } else {
-                        res.status(400).json({
-                            error: "password doesn't match"
-                        });
+                        res.render("error", {
+                            msg: "Passwords do not match",
+                            link1: "login"
+                        })
                     }
                 } else {
                     res.render("error", {
@@ -201,6 +200,7 @@ app.route("/login")
                 }
             });
         } catch (error) {
+            console.log(error)
             res.status(400).json({
                 error
             });
@@ -224,8 +224,9 @@ app.route("/signup")
                 res.redirect("/login")
             }).catch(err => {
                 console.log(err)
-                res.status(400).json({
-                    error: "User already exists"
+                res.render("error", {
+                    msg: "User already exists",
+                    link1: "login"
                 })
             })
 
@@ -236,11 +237,6 @@ app.route("/signup")
         }
 
     })
-
-
-
-
-
 
 
 app.use((req, res, next) => {

@@ -8,10 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', event => {
             // Get the title of the item associated with the checkbox
-            const title = event.target.parentNode.nextElementSibling.textContent.trim();
             const done = event.target.checked;
-            const list = document.getElementById("heading-info").textContent
-
+            const id = event.target.parentNode.nextElementSibling.id
             event.target.parentNode.parentNode.classList.toggle("done")
 
             // Make an HTTP request to update the database
@@ -21,8 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    list: list,
-                    title: title,
+                    id: id,
                     done: done,
 
                 })
@@ -141,11 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             })
         })
-
     }
-
-
-
 
     document.addEventListener("dblclick", (e) => {
         if (e.target.classList.contains("list-item")) {
@@ -159,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const newText = input.value.trim();
                 if (newText !== '') {
                     e.target.textContent = newText;
-                    updateTaskInDatabase(e.target.parentNode, currentText);
+                    updateTaskInDatabase(e.target.parentNode);
                 } else {
                     e.target.textContent = currentText;
                 }
@@ -179,18 +172,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 
-    function updateTaskInDatabase(item, newItemName) {
+    function updateTaskInDatabase(item) {
         const title = item.querySelector('.list-item').textContent.trim();
-        const list = document.getElementById('heading-info').textContent.trim();
+        const id = item.querySelector(".list-item").id
         const request = {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                title: title,
-                list: list,
-                newTitle: newItemName
+                id: id,
+                newTitle: title
             }),
         };
 
@@ -199,40 +191,5 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => {
                 console.log(response);
             });
-
     }
-
-    // For the navbar
-
-
-    // Import the HTML2Canvas library
-    const titleElement = document.querySelector(".header .title");
-
-    function updateTitleColor() {
-        // Convert the gradient background to an image
-        html2canvas(document.documentElement).then(canvas => {
-            const context = canvas.getContext("2d");
-
-            // Get the pixel color at the position of the title
-            const rect = titleElement.getBoundingClientRect();
-            const x = rect.left + rect.width / 2;
-            const y = (rect.top + rect.height / 2) + 5;
-            const pixel = context.getImageData(x, y, 1, 1).data;
-            const backgroundColor = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
-            const isMainColor = backgroundColor ===
-                "rgb(237, 238, 203)"; // Change this to match your --main-color RGB value
-            if (isMainColor) {
-                titleElement.style.color = "var(--secondary-color)";
-            } else {
-                titleElement.style.color = "var(--main-color)";
-            }
-        });
-    }
-
-    // Update the title color on initial load and after the page has loaded
-    updateTitleColor()
-    // Update the title color on every scroll
-    window.addEventListener("scroll", updateTitleColor);
-
-
 });

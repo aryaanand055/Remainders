@@ -1,7 +1,11 @@
-<%- include("header")%>
+<%- include("partials/header")%>
 <!-- Have a logout button -->
-<div class="container">
-    <h1><%=msg></h1><br />
-    <a href="/<%=link1%>>"><%=link1%>?</a>
+<div class="container text-center mt-3 w-25">
+    <div class="alert alert-secondary" role="alert">
+        <h4 class="alert-heading">Oops</h4>
+        <p><%=msg%></p>
+        <hr>
+        <a href="/<%=link1%>" class="btn btn-secondary"><%=link1%></a>
+    </div>
 </div>
-<%- include("footer")%>
+<%- include("partials/footer")%>

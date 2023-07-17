@@ -40,6 +40,10 @@ h1 {
     color: var(--secondary-color);
 }
 
+#heading-todo {
+    text-transform: capitalize;
+}
+
 .item {
     min-height: 70px;
     display: flex;

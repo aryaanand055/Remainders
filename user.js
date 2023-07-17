@@ -160,6 +160,55 @@ async function deleteOne(email, taskId) {
     }
 }
 
+//Returns json type with deleted count
+async function updateOne(email, taskId, done) {
+    try {
+        const user = await User.findOne({
+            email: email
+        });
+        const task = user.tasks.find(task => task._id.toString() === taskId);
+        if (task === -1) {
+            return {
+                error: "Task not found"
+            };
+        }
+
+        // Remove the task from the tasks array using splice
+        task.done = done
+        await user.save()
+        return {
+            success: "Task updated successfully",
+            user: user
+        };
+    } catch (err) {
+        return {
+            error: err.message
+        };
+    }
+}
+async function replaceOne(email, taskId, title) {
+    try {
+        const user = await User.findOne({
+            email: email
+        })
+        const task = user.tasks.find(task => task._id.toString() === taskId)
+
+        task.title = title
+        console.log(task.title)
+        await user.save()
+        return {
+            msg: "Successfully replaced",
+            user
+        };
+    } catch (err) {
+        console.error(err.stack);
+        return {
+            error: "Could not replace task"
+        };
+    }
+}
+
+
 // //Returns a json type msg
 // async function updateOne(list, title, done) {
 //     try {
@@ -215,5 +264,7 @@ module.exports = {
     findUser,
     insertOne,
     getAll,
-    deleteOne
+    deleteOne,
+    updateOne,
+    replaceOne
 };
