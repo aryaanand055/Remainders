@@ -174,6 +174,7 @@ app.route("/login")
         try {
             let user;
             userDb.findUser(email).then(data => {
+                console.log(data)
                 user = data
                 if (user) {
                     //check if password matches
@@ -221,6 +222,7 @@ app.route("/signup")
         try {
             console.log(req.body)
             userDb.addUser(fName, lName, userEmail, userPassword).then(data => {
+                console.log(data)
                 res.redirect("/login")
             }).catch(err => {
                 console.log(err)
